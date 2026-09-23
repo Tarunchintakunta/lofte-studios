@@ -54,16 +54,26 @@ Every placeholder is visibly labelled and listed in `LAUNCH_CHECKLIST.md`.
 3. *Footer overflowed at exactly 768px.* A 12-column grid with 48px gaps left ~14px per column and pushed the email address off-screen. The editorial split now waits for `lg`.
 4. *Logo flourish read as a strikethrough.* A hand-drawn extension of the ø slash crossed the L and collided with the f ascender. Replaced: the ø itself carries the field-aware accent colour.
 
-### Phase 2 — Premium homepage (static first, motion second)
-- [ ] Hero + signal field (deterministic seeded SVG; static resolved state renders without JS)
-- [ ] Capabilities: Copy · Video · Visual · Audio · Localization · Strategy — outcome-led, editorial rows
-- [ ] Why Løfte — "A complete content studio, without the usual handoffs."
-- [ ] Selected work preview — asymmetric editorial layout, labelled placeholder media
-- [ ] The Løfte method — six-step sequential scroll story
-- [ ] Proof — labelled placeholder state (no invented logos or testimonials)
-- [ ] Closing CTA — "Have a story worth lifting?"
-- [ ] Then: GSAP moments only (hero resolve, method narrative). Reduced-motion path verified.
-- [ ] Verify: lint · typecheck · build · screenshots @ 4 viewports · critique vs DESIGN_BRIEF
+### Phase 2 — Premium homepage ✅
+- [x] **Hero signal field.** Deterministic seeded SVG that resolves into *a page of set editorial type* — headline bars, blocks with real leading, ragged last lines, and two figures the text wraps around. The markup is the RESOLVED state and GSAP animates *from* the scatter, so no-JS and reduced-motion visitors land on the finished composition.
+- [x] Capabilities — six outcome-led editorial rows with a hairline spine, CSS-only hover
+- [x] Why Løfte — handoff diagram built from real text, not drawn
+- [x] Selected work — asymmetric layout, abstract reserved plates in the same visual language
+- [x] The Løfte method — sticky heading + advancing rail beside six scrolling steps
+- [x] Proof — honest empty state; no invented logos or testimonials
+- [x] Closing CTA on the blue field (spent exactly once on the page)
+- [x] Motion: hero resolve + method rail only. No universal fade-up, no decorative parallax.
+- [x] Verified: lint · typecheck · build · 8 smoke tests · captures @ 4 viewports + mobile slices
+
+**Fixed during Phase 2 review**
+1. *Screenshots were catching the hero mid-animation.* The `--force-prefers-reduced-motion` launch flag silently did nothing. Switched to Playwright's `reducedMotion: "reduce"` (CDP-emulated), which is also the state the resolved composition must look correct in.
+2. *The field read as a wireframe.* Rebuilt the geometry as an editorial page with figure text-wrap; verified programmatically that zero fragments collide with a figure and none escape the viewBox.
+3. *The wide work plate was scaled up and cropped* by a fixed viewBox under `slice`. Plates now derive their viewBox from the slot's aspect ratio.
+4. *The handoff diagram argued the opposite of the copy on mobile.* Four stages wrapped two-by-two, leaving the "one continuous line" spanning row one only. The rule now flips orientation instead of wrapping.
+5. *`SectionHead`'s aside landed between the heading and the standfirst* on narrow screens. Grid + `row-start` keeps DOM order readable and lifts it top-right only where there is a column for it.
+6. *The hero field never filled its column on mobile* — a 7/8 box around 7/10 artwork letterboxed under `meet`.
+
+**New permanent test:** `motion.smoke.spec.ts` asserts both ends of the hero timeline — that it animates at all, and that every fragment returns exactly to its authored coordinates. A refactor that inverted the from/to contract would leave no-JS visitors looking at an unresolved mess, and this catches it.
 
 ### Phase 3 — Core pages
 - [ ] `/services` overview (5 outcome groups) + `/services/[slug]` template

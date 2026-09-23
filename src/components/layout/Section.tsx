@@ -85,15 +85,28 @@ export function SectionHead({
 }) {
   return (
     <div className={cn("border-rule border-t pt-6 md:pt-8", className)}>
-      <div className="flex flex-col gap-x-16 gap-y-6 lg:flex-row lg:items-end lg:justify-between">
-        <h2 id={id} className="optical-left text-display-2 max-w-[18ch] text-balance">
+      <div className="lg:grid lg:grid-cols-12 lg:gap-x-12">
+        <h2
+          id={id}
+          className="optical-left text-display-2 max-w-[18ch] text-balance lg:col-span-8"
+        >
           {heading}
         </h2>
-        {aside ? <div className="shrink-0 lg:pb-2 lg:text-right">{aside}</div> : null}
+
+        {standfirst ? (
+          <p className="measure-wide text-body-lg text-fg-muted mt-6 lg:col-span-8">
+            {standfirst}
+          </p>
+        ) : null}
+
+        {/* Last in the DOM so it reads after the standfirst when stacked;
+            lifted into the first row only once there is a column for it. */}
+        {aside ? (
+          <div className="text-body-sm mt-6 lg:col-span-3 lg:col-start-10 lg:row-start-1 lg:mt-0 lg:text-right">
+            {aside}
+          </div>
+        ) : null}
       </div>
-      {standfirst ? (
-        <p className="measure-wide text-body-lg text-fg-muted mt-6">{standfirst}</p>
-      ) : null}
     </div>
   );
 }

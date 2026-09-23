@@ -32,8 +32,13 @@ export default defineConfig({
   use: {
     baseURL: BASE_URL,
     trace: "on-first-retry",
-    // Deterministic captures: no OS scrollbar overlay, no animation mid-frame.
-    launchOptions: { args: ["--hide-scrollbars", "--force-prefers-reduced-motion"] },
+    // Deterministic captures. `reducedMotion` is emulated through CDP — the
+    // --force-prefers-reduced-motion launch flag silently did nothing, and the
+    // first round of screenshots caught the hero field mid-timeline because of
+    // it. Reduced motion is also the state the resolved composition must look
+    // correct in, so this is the right default for review.
+    reducedMotion: "reduce",
+    launchOptions: { args: ["--hide-scrollbars"] },
   },
 
   projects: [

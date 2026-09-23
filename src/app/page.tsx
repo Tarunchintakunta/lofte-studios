@@ -1,59 +1,26 @@
-import { Container, Section, SectionHead } from "@/components/layout/Section";
-import { ButtonLink } from "@/components/ui/Button";
-import { TextLink } from "@/components/ui/TextLink";
-import { cta, site } from "@/lib/site";
+import { Hero } from "@/components/sections/Hero";
+import { Capabilities } from "@/components/sections/Capabilities";
+import { WhyLofte } from "@/components/sections/WhyLofte";
+import { SelectedWork } from "@/components/sections/SelectedWork";
+import { Method } from "@/components/sections/Method";
+import { Proof } from "@/components/sections/Proof";
+import { ClosingCta } from "@/components/sections/ClosingCta";
 
 /**
- * Phase 1 skeleton. Exercises all three editorial fields, the display scale,
- * both button variants, and the reading measure so the foundation can be
- * reviewed at every viewport before the homepage sections are written.
+ * Home, in the order set by SITE_AND_CONTENT.md. Each section earns its place:
+ * a promise, the six capabilities, the argument for a single studio, the work,
+ * the method, what we can honestly prove, and the invitation.
  */
 export default function HomePage() {
   return (
     <>
-      <Section surface="ink" size="none" className="pt-40 pb-(--spacing-section) md:pt-48">
-        <Container>
-          <h1 className="optical-left max-w-[15ch] text-display-1">{site.tagline}</h1>
-          <p className="measure-wide mt-8 text-body-lg text-fg-muted">
-            Løfte Studios shapes clear, culturally fluent content across words, motion,
-            sound, and visual systems.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <ButtonLink href={cta.primary.href} size="lg">
-              {cta.primary.label}
-            </ButtonLink>
-            <ButtonLink href={cta.secondary.href} variant="outline" size="lg">
-              {cta.secondary.label}
-            </ButtonLink>
-          </div>
-        </Container>
-      </Section>
-
-      <Section surface="paper">
-        <Container>
-          <SectionHead
-            heading="A complete content studio, without the usual handoffs."
-            standfirst="Strategy, production, localization, and delivery sit in one room, so the intent survives all the way to the final file."
-          />
-          <p className="measure mt-10 text-body text-fg-muted">
-            Foundation check: body copy on the paper field, at the reading measure, with
-            an <TextLink href="/services">inline link</TextLink> for contrast.
-          </p>
-        </Container>
-      </Section>
-
-      <Section surface="blue" size="tight">
-        <Container>
-          <h2 className="optical-left max-w-[14ch] text-display-2">
-            Have a story worth lifting?
-          </h2>
-          <div className="mt-8">
-            <ButtonLink href={cta.primary.href} variant="outline" size="lg">
-              {cta.primary.label}
-            </ButtonLink>
-          </div>
-        </Container>
-      </Section>
+      <Hero />
+      <Capabilities />
+      <WhyLofte />
+      <SelectedWork />
+      <Method />
+      <Proof />
+      <ClosingCta />
     </>
   );
 }

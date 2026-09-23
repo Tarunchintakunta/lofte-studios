@@ -14,12 +14,12 @@ export function PlaceholderNote({
   return (
     <p
       className={cn(
-        "border-coral-deep/70 flex items-start gap-2.5 border-l-2 pl-3",
-        "text-micro text-fg-subtle",
+        "border-coral-deep/70 flex flex-col gap-1.5 border-l-2 pl-3.5",
+        "text-micro text-fg-subtle measure-wide sm:flex-row sm:gap-3",
         className,
       )}
     >
-      <span className="text-fg-muted font-sans font-semibold tracking-wide">
+      <span className="text-fg-muted shrink-0 font-sans font-semibold tracking-wide">
         Placeholder
       </span>
       <span>{children}</span>

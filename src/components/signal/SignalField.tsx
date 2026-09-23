@@ -10,6 +10,7 @@ const TONE_FILL: Record<Tone, string> = {
   mist: "var(--color-mist)",
   sky: "var(--color-sky)",
   coral: "var(--color-coral)",
+  paper: "var(--color-paper)",
 };
 
 /**
@@ -40,8 +41,8 @@ export function SignalField({ className }: { className?: string }) {
           opacity: 0,
           scaleY: 0.72,
           transformOrigin: "center",
-          duration: 1.1,
-          stagger: 0.12,
+          duration: 0.9,
+          stagger: 0.1,
         })
         .from(
           "[data-fragment]",
@@ -52,8 +53,8 @@ export function SignalField({ className }: { className?: string }) {
             rotation: (_i, el: Element) => Number((el as SVGElement).dataset.sr),
             opacity: 0,
             transformOrigin: "center",
-            duration: 1.45,
-            stagger: { each: 0.028, from: "random" },
+            duration: 1.15,
+            stagger: { each: 0.016, from: "random" },
           },
           0.15,
         )
@@ -75,7 +76,7 @@ export function SignalField({ className }: { className?: string }) {
           {
             attr: { x: FIELD.signal.to },
             opacity: 1,
-            duration: 1.25,
+            duration: 1.05,
             ease: "power2.inOut",
           },
           "-=0.35",
@@ -114,9 +115,9 @@ export function SignalField({ className }: { className?: string }) {
             width={plane.w}
             height={plane.h}
             fill="var(--color-blue)"
-            fillOpacity={0.1}
+            fillOpacity={0.16}
             stroke="var(--color-mist)"
-            strokeOpacity={0.18}
+            strokeOpacity={0.32}
             strokeWidth={1}
             vectorEffect="non-scaling-stroke"
           />
@@ -134,7 +135,7 @@ export function SignalField({ className }: { className?: string }) {
             x={fragment.x}
             y={fragment.y}
             width={fragment.w}
-            height={fragment.tone === "mist" ? 1.5 : 2}
+            height={fragment.h}
             fill={TONE_FILL[fragment.tone]}
             fillOpacity={fragment.opacity}
           />
@@ -150,7 +151,7 @@ export function SignalField({ className }: { className?: string }) {
             cy={node.y}
             r={node.r}
             fill={TONE_FILL[node.tone]}
-            fillOpacity={node.tone === "sky" ? 0.9 : 0.55}
+            fillOpacity={node.tone === "sky" ? 0.95 : 0.6}
           />
         ))}
       </g>
