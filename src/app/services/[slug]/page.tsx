@@ -162,12 +162,14 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
           <div className="mt-10 grid gap-x-8 gap-y-10 md:grid-cols-2">
             {related.slice(0, 2).map((study, index) => (
               <article key={study.slug}>
-                <div className="border-rule aspect-[16/10] w-full overflow-hidden border">
-                  <WorkPlate seed={index + 4} />
-                </div>
-                <h3 className="text-heading-1 font-display mt-5">
-                  {study.status === "published" ? study.title : study.reservedTitle}
-                </h3>
+                <Link href={`/work/${study.slug}`} className="group block">
+                  <div className="border-rule group-hover:border-fg-subtle aspect-[16/10] w-full overflow-hidden border transition-colors duration-[--duration-base]">
+                    <WorkPlate seed={index + 4} />
+                  </div>
+                  <h3 className="text-heading-1 font-display group-hover:text-accent mt-5 transition-colors duration-[--duration-base]">
+                    {study.status === "published" ? study.title : study.reservedTitle}
+                  </h3>
+                </Link>
                 <p className="text-body-sm text-fg-muted measure mt-2">
                   {study.status === "published" ? study.challenge : study.reservedSummary}
                 </p>

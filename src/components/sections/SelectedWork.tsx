@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container, Section, SectionHead } from "@/components/layout/Section";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
 import { TextLink } from "@/components/ui/TextLink";
@@ -46,24 +47,28 @@ export async function SelectedWork() {
                 index === 0 ? "lg:col-span-12" : "lg:col-span-6",
               )}
             >
-              <div
-                className={cn(
-                  "border-rule w-full overflow-hidden border",
-                  index === 0 ? "aspect-[16/7]" : "aspect-[16/10]",
-                )}
-              >
-                <WorkPlate seed={index + 1} ratio={index === 0 ? "wide" : "standard"} />
-              </div>
-
-              <div className="mt-5 flex flex-col gap-2">
+              <Link href={`/work/${study.slug}`} className="block">
+                <div
+                  className={cn(
+                    "border-rule group-hover:border-fg-subtle w-full overflow-hidden",
+                    "border transition-colors duration-[--duration-base]",
+                    index === 0 ? "aspect-[16/7]" : "aspect-[16/10]",
+                  )}
+                >
+                  <WorkPlate seed={index + 1} ratio={index === 0 ? "wide" : "standard"} />
+                </div>
                 <h3
                   className={cn(
-                    "font-display",
+                    "font-display group-hover:text-accent mt-5 transition-colors",
+                    "duration-[--duration-base]",
                     index === 0 ? "text-display-3" : "text-heading-1",
                   )}
                 >
                   {isReserved ? study.reservedTitle : study.title}
                 </h3>
+              </Link>
+
+              <div className="mt-2 flex flex-col gap-2">
                 <p className="text-body-sm text-fg-muted measure">
                   {isReserved ? study.reservedSummary : study.challenge}
                 </p>
