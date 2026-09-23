@@ -1,6 +1,6 @@
 import { Container, Section } from "@/components/layout/Section";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
-import { clientLogos, testimonials } from "@/content/proof";
+import { getClientLogos, getTestimonials } from "@/lib/content";
 
 /**
  * Proof.
@@ -13,7 +13,11 @@ import { clientLogos, testimonials } from "@/content/proof";
  * Once `src/content/proof.ts` has approved entries, this renders them and the
  * note disappears on its own.
  */
-export function Proof() {
+export async function Proof() {
+  const [clientLogos, testimonials] = await Promise.all([
+    getClientLogos(),
+    getTestimonials(),
+  ]);
   const hasProof = clientLogos.length > 0 || testimonials.length > 0;
 
   return (

@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { VIEWPORTS } from "../../playwright.config";
-import { LIVE_ROUTES } from "./routes";
+import { SHOT_ROUTES } from "./routes";
 
 /**
  * Captures, not assertions. `pnpm shots` writes a full-page PNG per route per
@@ -10,7 +10,7 @@ for (const viewport of VIEWPORTS) {
   test.describe(`${viewport.name} · ${viewport.width}px`, () => {
     test.use({ viewport: { width: viewport.width, height: viewport.height } });
 
-    for (const route of LIVE_ROUTES) {
+    for (const route of SHOT_ROUTES) {
       test(`${route.name}`, async ({ page }) => {
         await page.goto(route.path, { waitUntil: "load" });
         // Guard against capturing some other app that happens to hold the port.

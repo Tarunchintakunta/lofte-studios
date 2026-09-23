@@ -2,7 +2,7 @@ import { Container, Section, SectionHead } from "@/components/layout/Section";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
 import { TextLink } from "@/components/ui/TextLink";
 import { WorkPlate } from "@/components/signal/WorkPlate";
-import { caseStudies } from "@/content/case-studies";
+import { getCaseStudies } from "@/lib/content";
 import { cn } from "@/lib/cn";
 
 /**
@@ -16,7 +16,8 @@ import { cn } from "@/lib/cn";
  * With no approved case studies yet, the slots render as reserved plates with
  * one honest note at section level — not three invented clients.
  */
-export function SelectedWork() {
+export async function SelectedWork() {
+  const caseStudies = await getCaseStudies();
   const published = caseStudies.filter((study) => study.status === "published");
   const slots = published.length > 0 ? published : caseStudies;
   const isReserved = published.length === 0;

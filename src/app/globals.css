@@ -295,6 +295,34 @@
   }
 }
 
+/* --------------------------------------------------------------------------
+   Disclosure
+   --------------------------------------------------------------------------
+   Service detail and FAQ use native <details>, not a JavaScript accordion:
+   it is keyboard accessible, findable by in-page search, and works with no
+   JS at all. Where the browser supports it, the open/close is animated with
+   `interpolate-size` — pure progressive enhancement, and the global
+   reduced-motion rule below already flattens it to an instant toggle.
+   -------------------------------------------------------------------------- */
+
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  details::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size var(--duration-base) var(--ease-quiet),
+      content-visibility var(--duration-base) allow-discrete;
+  }
+
+  details[open]::details-content {
+    block-size: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

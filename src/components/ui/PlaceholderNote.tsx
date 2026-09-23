@@ -15,7 +15,9 @@ export function PlaceholderNote({
     <p
       className={cn(
         "border-coral-deep/70 flex flex-col gap-1.5 border-l-2 pl-3.5",
-        "text-micro text-fg-subtle measure-wide sm:flex-row sm:gap-3",
+        // Always stacked: this note also sits in narrow sidebars, where a
+        // side-by-side label squeezed the text into a two-word column.
+        "text-micro text-fg-subtle measure-wide",
         className,
       )}
     >

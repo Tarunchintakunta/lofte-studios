@@ -4,6 +4,8 @@ import { site, siteUrl } from "@/lib/site";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SkipLink } from "@/components/layout/SkipLink";
+import { Analytics } from "@/components/seo/Analytics";
+import { OrganizationSchema, WebSiteSchema } from "@/components/seo/StructuredData";
 import "./globals.css";
 
 /**
@@ -77,6 +79,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />
+        <OrganizationSchema />
+        <WebSiteSchema />
       </head>
       <body className="surface-ink bg-surface text-fg flex min-h-dvh flex-col">
         <SkipLink />
@@ -85,6 +89,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

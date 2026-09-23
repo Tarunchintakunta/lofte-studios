@@ -1,5 +1,5 @@
 import { test } from "@playwright/test";
-import { LIVE_ROUTES } from "./routes";
+import { SHOT_ROUTES } from "./routes";
 
 /**
  * Full-page mobile captures are too tall to review as one image, so `pnpm
@@ -8,7 +8,7 @@ import { LIVE_ROUTES } from "./routes";
 const WIDTH = 375;
 const SLICE = 1400;
 
-for (const route of LIVE_ROUTES) {
+for (const route of SHOT_ROUTES) {
   test(`mobile slices · ${route.name}`, async ({ page }) => {
     await page.setViewportSize({ width: WIDTH, height: 812 });
     await page.goto(route.path, { waitUntil: "load" });
