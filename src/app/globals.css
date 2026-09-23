@@ -1,0 +1,311 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Løfte Studios — design tokens
+   --------------------------------------------------------------------------
+   One source of truth. Components never reach for raw hex values.
+
+   Colour is organised in two layers:
+   1. Brand constants (`--color-*`) — the fixed palette from DESIGN_BRIEF.md
+      plus the few derived tones needed to keep text legible on both fields.
+   2. Surface-aware semantics (`--fg`, `--bg`, `--rule`, …) — re-declared by
+      `.surface-ink` / `.surface-paper` so a section can be flipped between the
+      two editorial fields without touching a single component.
+
+   Every foreground/background pair below was measured. Ratios noted inline.
+   ========================================================================== */
+
+@theme {
+  /* --- Brand constants ---------------------------------------------- */
+  --color-ink: #07111e; /* main background */
+  --color-ink-raised: #101a27; /* lifted panel on ink */
+  --color-ink-sunken: #040b14; /* inset / footer well */
+  --color-blue: #284bff; /* active surfaces + decisive CTAs ONLY.
+                              3.20:1 on ink — never use as body text there. */
+  --color-blue-deep: #1c3ae0; /* link text on paper (6.81:1), CTA hover */
+  --color-sky: #6ca9ff; /* light signal highlight, links on ink (7.90:1) */
+  --color-paper: #f4f1e8; /* quiet editorial background */
+  --color-paper-raised: #eae7dc;
+  --color-coral: #ff735d; /* rare accent. 7.10:1 on ink; fails on paper. */
+  --color-coral-deep: #c43e28; /* the only coral permitted on paper (4.57:1) */
+  --color-mist: #b8c6d5; /* subdued text on ink (10.90:1) */
+  --color-mist-dim: #8697a9; /* tertiary text on ink */
+  --color-slate: #4a5258; /* secondary text on paper (≈6.8:1) */
+  --color-slate-dim: #666b6f; /* tertiary text on paper (4.77:1) */
+
+  /* --- Typography ---------------------------------------------------- */
+  --font-display: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  --text-display-1: clamp(2.75rem, 0.9014rem + 7.8873vw, 8rem);
+  --text-display-1--line-height: 0.92;
+  --text-display-1--letter-spacing: -0.035em;
+  --text-display-1--font-weight: 500;
+
+  --text-display-2: clamp(2.125rem, 1.2007rem + 3.9437vw, 4.75rem);
+  --text-display-2--line-height: 0.98;
+  --text-display-2--letter-spacing: -0.03em;
+  --text-display-2--font-weight: 500;
+
+  --text-display-3: clamp(1.75rem, 1.2218rem + 2.2535vw, 3.25rem);
+  --text-display-3--line-height: 1.04;
+  --text-display-3--letter-spacing: -0.025em;
+  --text-display-3--font-weight: 500;
+
+  --text-heading-1: clamp(1.375rem, 1.1549rem + 0.939vw, 2rem);
+  --text-heading-1--line-height: 1.18;
+  --text-heading-1--letter-spacing: -0.018em;
+  --text-heading-1--font-weight: 600;
+
+  --text-heading-2: clamp(1.1875rem, 1.0774rem + 0.4695vw, 1.5rem);
+  --text-heading-2--line-height: 1.25;
+  --text-heading-2--letter-spacing: -0.012em;
+  --text-heading-2--font-weight: 600;
+
+  --text-body-lg: clamp(1.0625rem, 0.9745rem + 0.3756vw, 1.3125rem);
+  --text-body-lg--line-height: 1.55;
+  --text-body-lg--letter-spacing: -0.006em;
+
+  --text-body: clamp(1rem, 0.978rem + 0.0939vw, 1.0625rem);
+  --text-body--line-height: 1.62;
+  --text-body--letter-spacing: -0.003em;
+
+  --text-body-sm: clamp(0.875rem, 0.853rem + 0.0939vw, 0.9375rem);
+  --text-body-sm--line-height: 1.58;
+
+  --text-micro: clamp(0.7813rem, 0.7702rem + 0.0469vw, 0.8125rem);
+  --text-micro--line-height: 1.45;
+  --text-micro--letter-spacing: 0.01em;
+
+  /* --- Layout -------------------------------------------------------- */
+  --container-page: 90rem; /* 1440px */
+  --container-prose: 38rem; /* comfortable measure, ~68ch at body size */
+  --container-prose-wide: 46rem;
+
+  --spacing-gutter: clamp(1.25rem, 0.4577rem + 3.3803vw, 3.5rem); /* 20 → 56 */
+  --spacing-section: clamp(4.5rem, 2.5634rem + 8.2629vw, 10rem); /* 72 → 160 */
+  --spacing-section-tight: clamp(3rem, 1.9366rem + 4.5399vw, 6rem);
+
+  /* --- Motion --------------------------------------------------------
+     Shared with GSAP via `readMotionTokens()` so CSS and JS never drift. */
+  --ease-signal: cubic-bezier(0.22, 1, 0.36, 1); /* decisive settle */
+  --ease-quiet: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 160ms;
+  --duration-base: 280ms;
+  --duration-slow: 620ms;
+
+  /* --- Radii ----------------------------------------------------------
+     Rounded forms are reserved for the signal/connection system: the nav
+     capsule, filter chips, and signal nodes. Editorial blocks stay square. */
+  --radius-capsule: 999px;
+  --radius-node: 0.375rem;
+}
+
+/* Surface-aware semantics, exposed to Tailwind by reference so that
+   `bg-surface` / `text-fg` resolve against whichever field wraps them. */
+@theme inline {
+  --color-surface: var(--bg);
+  --color-surface-raised: var(--bg-raised);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-accent: var(--accent);
+  --color-accent-quiet: var(--accent-quiet);
+  --color-focus: var(--focus);
+}
+
+/* --- Ink field (default) ------------------------------------------- */
+:root,
+.surface-ink {
+  --bg: var(--color-ink);
+  --bg-raised: var(--color-ink-raised);
+  --fg: var(--color-paper); /* 16.78:1 */
+  --fg-muted: var(--color-mist); /* 10.90:1 */
+  --fg-subtle: var(--color-mist-dim); /* ≈6.4:1 */
+  --rule: color-mix(in oklab, var(--color-mist) 18%, transparent);
+  --rule-strong: color-mix(in oklab, var(--color-mist) 38%, transparent);
+  --accent: var(--color-sky); /* 7.90:1 — link text on ink */
+  --accent-quiet: var(--color-blue);
+  --focus: var(--color-sky);
+  color-scheme: dark;
+}
+
+/* --- Paper field ---------------------------------------------------- */
+.surface-paper {
+  --bg: var(--color-paper);
+  --bg-raised: var(--color-paper-raised);
+  --fg: var(--color-ink); /* 16.78:1 */
+  --fg-muted: var(--color-slate); /* ≈6.8:1  */
+  --fg-subtle: var(--color-slate-dim); /* 4.77:1  */
+  --rule: color-mix(in oklab, var(--color-ink) 14%, transparent);
+  --rule-strong: color-mix(in oklab, var(--color-ink) 30%, transparent);
+  --accent: var(--color-blue-deep); /* 6.81:1 — link text on paper */
+  --accent-quiet: var(--color-blue);
+  --focus: var(--color-blue-deep);
+  color-scheme: light;
+}
+
+/* --- Blue field: used sparingly, for a decisive invitation ---------- */
+.surface-blue {
+  --bg: var(--color-blue);
+  --bg-raised: var(--color-blue-deep);
+  --fg: #ffffff; /* 5.93:1 */
+  --fg-muted: color-mix(in oklab, #ffffff 86%, var(--color-ink));
+  --fg-subtle: color-mix(in oklab, #ffffff 72%, var(--color-ink));
+  --rule: color-mix(in oklab, #ffffff 26%, transparent);
+  --rule-strong: color-mix(in oklab, #ffffff 48%, transparent);
+  --accent: #ffffff;
+  --accent-quiet: var(--color-sky);
+  --focus: #ffffff;
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+  * {
+    min-width: 0; /* stop long words and flex children forcing page-wide scroll */
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Offset in-page anchors so the floating nav never covers a heading. */
+    scroll-padding-top: 7rem;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.62;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* Nothing on this site is meant to scroll sideways. */
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One visible, high-contrast focus treatment everywhere, on both fields. */
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-blue);
+    color: #ffffff;
+  }
+
+  /* Media never overflows its column. */
+  img,
+  video,
+  svg,
+  canvas {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ==========================================================================
+   Utilities
+   ========================================================================== */
+
+/* Page container: 1440px max with gutters that scale 20px → 56px. */
+@utility container-page {
+  width: 100%;
+  max-width: var(--container-page);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Reading measure for body copy. */
+@utility measure {
+  max-width: var(--container-prose);
+}
+
+@utility measure-wide {
+  max-width: var(--container-prose-wide);
+}
+
+/* Optical alignment for very large display type: pulls the first glyph back
+   to the true margin so headlines sit flush with the rule above them. */
+@utility optical-left {
+  margin-left: -0.055em;
+}
+
+/* Visible only to screen readers, until focused. */
+@utility sr-only-focusable {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+
+  &:focus-visible {
+    position: fixed;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+}
+
+/* A single hairline in the current field's rule colour. */
+@utility hairline {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  width: 100%;
+}
+
+/* ==========================================================================
+   Motion
+   --------------------------------------------------------------------------
+   Elements a GSAP timeline will animate start hidden ONLY when JS is running
+   and motion is allowed. Without JS — and under reduced motion — the `.signal-*`
+   classes are inert, so content renders in full, in document order.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js .signal-hidden {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
