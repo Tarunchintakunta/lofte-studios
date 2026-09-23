@@ -141,7 +141,7 @@ export function Header() {
               "transition-[background-color,border-color,backdrop-filter]",
               "duration-[--duration-base] ease-[--ease-quiet]",
               lifted || open
-                ? "border-rule bg-[color-mix(in_oklab,var(--color-ink)_82%,transparent)] backdrop-blur-xl"
+                ? "border-rule bg-[color-mix(in_oklab,var(--color-chalk)_80%,transparent)] backdrop-blur-xl"
                 : "border-transparent bg-transparent",
             )}
           >
@@ -234,7 +234,7 @@ export function Header() {
         data-testid="mobile-menu"
         hidden={!open}
         className={cn(
-          "surface-ink bg-surface fixed inset-0 z-40 overflow-y-auto lg:hidden",
+          "surface-paper bg-surface fixed inset-0 z-40 overflow-y-auto lg:hidden",
           "pt-24 pb-(--spacing-gutter)",
         )}
       >

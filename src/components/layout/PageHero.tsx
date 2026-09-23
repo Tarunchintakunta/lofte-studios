@@ -24,7 +24,7 @@ export function PageHero({
 }) {
   return (
     <Section
-      surface="ink"
+      surface="paper"
       size="none"
       className={cn("pt-32 pb-(--spacing-section-tight) md:pt-40", className)}
     >

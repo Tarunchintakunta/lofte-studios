@@ -29,7 +29,7 @@ export default function PrivacyPage() {
         standfirst="What this website currently does with information, written plainly so it can be checked against a real policy."
       />
 
-      <Section surface="ink" size="none" className="pb-(--spacing-section)">
+      <Section surface="paper" size="none" className="pb-(--spacing-section)">
         <Container>
           <PlaceholderNote className="mb-12">
             This is not a privacy policy and has had no legal review. It is a factual

@@ -87,9 +87,19 @@ the only one permitted on that field.
 
 ### Motion
 
-GSAP runs in exactly two places — the hero field resolving once on load, and
-the method rail advancing as the six steps scroll. There is no universal
-fade-up and no decorative parallax.
+GSAP (through `@gsap/react`'s `useGSAP`) runs in exactly four places, each a
+deliberate moment rather than an effect:
+
+| Moment     | Behaviour                                                                                        |
+| ---------- | ------------------------------------------------------------------------------------------------ |
+| Hero       | The plate settles `1.10 → 1` while the scattered fragments resolve, once, on load                |
+| Feature    | A pinned frame scrubs `0.86 → 1.03` — from 768px up, `pinType: "transform"`, one viewport of pin |
+| Method     | The step rail advances as the six steps scroll past a sticky panel                               |
+| Work cards | `scale(1.04)` inside a clipped frame, hover-capable pointers only, with a matching focus state   |
+
+There is no universal fade-up and no decorative parallax. Every one of the four
+is off under `prefers-reduced-motion`, and `tests/e2e/zoom.smoke.spec.ts`
+asserts both ends of each range plus the degraded state.
 
 The hero's markup **is** the resolved composition; GSAP animates _from_ the
 scattered offsets. So a visitor with no JavaScript, or with reduced motion on,

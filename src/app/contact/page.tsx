@@ -21,7 +21,7 @@ export default function ContactPage() {
         standfirst="Tell us what you are trying to get across and who needs to understand it. We will come back with what we would make, and what we would leave alone."
       />
 
-      <Section surface="ink" size="none" className="pb-(--spacing-section)">
+      <Section surface="paper" size="none" className="pb-(--spacing-section)">
         <Container>
           <div className="grid gap-x-12 gap-y-12 lg:grid-cols-12">
             <div className="lg:col-span-7">

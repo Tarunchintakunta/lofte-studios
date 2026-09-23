@@ -25,7 +25,7 @@ export default async function AboutPage() {
         standfirst={`Løfte Studios is a creative-production and digital-storytelling partner in ${site.city}. We put strategy and production in the same room because the gap between them is where most content quietly loses its point.`}
       />
 
-      <Section surface="paper" labelledBy="story-heading">
+      <Section surface="chalk" labelledBy="story-heading">
         <Container>
           <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
             <h2 id="story-heading" className="text-display-3 font-display lg:col-span-4">
@@ -58,7 +58,7 @@ export default async function AboutPage() {
         </Container>
       </Section>
 
-      <Section surface="ink" labelledBy="principles-heading">
+      <Section surface="paper" labelledBy="principles-heading">
         <Container>
           <SectionHead
             id="principles-heading"
@@ -87,7 +87,7 @@ export default async function AboutPage() {
       </Section>
 
       {team.length > 0 ? (
-        <Section surface="ink" size="tight" labelledBy="team-heading">
+        <Section surface="paper" size="tight" labelledBy="team-heading">
           <Container>
             <SectionHead id="team-heading" heading="The people." />
             <ul className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -104,7 +104,7 @@ export default async function AboutPage() {
           </Container>
         </Section>
       ) : (
-        <Section surface="ink" size="tight">
+        <Section surface="paper" size="tight">
           <Container>
             <PlaceholderNote>
               A team section is built and hidden. Supply names, roles, and portraits in{" "}

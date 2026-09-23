@@ -59,8 +59,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#07111e",
-  colorScheme: "dark light",
+  themeColor: "#f4f1e8",
+  colorScheme: "light",
 };
 
 /**
@@ -82,7 +82,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <OrganizationSchema />
         <WebSiteSchema />
       </head>
-      <body className="surface-ink bg-surface text-fg flex min-h-dvh flex-col">
+      <body className="surface-paper bg-surface text-fg flex min-h-dvh flex-col">
         <SkipLink />
         <Header />
         <main id="main" className="flex-1">

@@ -21,7 +21,7 @@ export async function Proof() {
   const hasProof = clientLogos.length > 0 || testimonials.length > 0;
 
   return (
-    <Section surface="paper" size="tight" labelledBy="proof-heading">
+    <Section surface="chalk" size="tight" labelledBy="proof-heading">
       <Container>
         <div className="border-rule grid gap-x-12 gap-y-8 border-t pt-8 lg:grid-cols-12">
           <h2 id="proof-heading" className="text-heading-1 font-display lg:col-span-4">

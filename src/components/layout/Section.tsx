@@ -1,12 +1,18 @@
-import type { ElementType, ReactNode } from "react";
+import type { ElementType, ReactNode, Ref } from "react";
 import { cn } from "@/lib/cn";
 
-export type Surface = "ink" | "paper" | "blue";
+/**
+ * The light fields, lightest to deepest, plus the blue-tinted invitation.
+ * `ink` is retained and still correct, but the site no longer uses it.
+ */
+export type Surface = "chalk" | "paper" | "deep" | "wash" | "ink";
 
 const surfaces: Record<Surface, string> = {
-  ink: "surface-ink",
+  chalk: "surface-chalk",
   paper: "surface-paper",
-  blue: "surface-blue",
+  deep: "surface-deep",
+  wash: "surface-wash",
+  ink: "surface-ink",
 };
 
 const sizes = {
@@ -22,12 +28,13 @@ const sizes = {
  */
 export function Section({
   children,
-  surface = "ink",
+  surface = "paper",
   size = "base",
   as: Tag = "section",
   id,
   className,
   labelledBy,
+  ref,
 }: {
   children: ReactNode;
   surface?: Surface;
@@ -36,9 +43,13 @@ export function Section({
   id?: string;
   className?: string;
   labelledBy?: string;
+  /** React 19 passes `ref` as an ordinary prop — no forwardRef needed.
+      ScrollTrigger needs the real section element to pin. */
+  ref?: Ref<HTMLElement>;
 }) {
   return (
     <Tag
+      ref={ref}
       id={id}
       aria-labelledby={labelledBy}
       className={cn(

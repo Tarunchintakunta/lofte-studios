@@ -1,10 +1,8 @@
-import Link from "next/link";
 import { Container, Section, SectionHead } from "@/components/layout/Section";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
 import { TextLink } from "@/components/ui/TextLink";
-import { WorkPlate } from "@/components/signal/WorkPlate";
+import { WorkCard } from "@/components/work/WorkCard";
 import { getCaseStudies } from "@/lib/content";
-import { cn } from "@/lib/cn";
 
 /**
  * Selected work.
@@ -24,7 +22,7 @@ export async function SelectedWork() {
   const isReserved = published.length === 0;
 
   return (
-    <Section surface="ink" id="work" labelledBy="work-heading">
+    <Section surface="paper" id="work" labelledBy="work-heading">
       <Container>
         <SectionHead
           id="work-heading"
@@ -39,46 +37,15 @@ export async function SelectedWork() {
 
         <div className="mt-12 grid gap-x-8 gap-y-12 md:mt-16 lg:grid-cols-12">
           {slots.slice(0, 3).map((study, index) => (
-            <article
+            <WorkCard
               key={study.slug}
-              className={cn(
-                "group",
-                // First piece runs wide; the pair below share the row.
-                index === 0 ? "lg:col-span-12" : "lg:col-span-6",
-              )}
-            >
-              <Link href={`/work/${study.slug}`} className="block">
-                <div
-                  className={cn(
-                    "border-rule group-hover:border-fg-subtle w-full overflow-hidden",
-                    "border transition-colors duration-[--duration-base]",
-                    index === 0 ? "aspect-[16/7]" : "aspect-[16/10]",
-                  )}
-                >
-                  <WorkPlate seed={index + 1} ratio={index === 0 ? "wide" : "standard"} />
-                </div>
-                <h3
-                  className={cn(
-                    "font-display group-hover:text-accent mt-5 transition-colors",
-                    "duration-[--duration-base]",
-                    index === 0 ? "text-display-3" : "text-heading-1",
-                  )}
-                >
-                  {isReserved ? study.reservedTitle : study.title}
-                </h3>
-              </Link>
-
-              <div className="mt-2 flex flex-col gap-2">
-                <p className="text-body-sm text-fg-muted measure">
-                  {isReserved ? study.reservedSummary : study.challenge}
-                </p>
-                <p className="text-micro text-fg-subtle">
-                  {study.capabilities
-                    .map((c) => c[0].toUpperCase() + c.slice(1))
-                    .join(" · ")}
-                </p>
-              </div>
-            </article>
+              study={study}
+              seed={index + 1}
+              headingLevel={3}
+              // The first piece runs wide; the pair below share the row.
+              size={index === 0 ? "wide" : "standard"}
+              className={index === 0 ? "lg:col-span-12" : "lg:col-span-6"}
+            />
           ))}
         </div>
 

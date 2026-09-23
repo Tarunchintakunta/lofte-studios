@@ -66,7 +66,7 @@ export default async function NotePage(props: PageProps<"/notes/[slug]">) {
         }
       />
 
-      <Section surface="ink" size="none" className="pb-(--spacing-section)">
+      <Section surface="paper" size="none" className="pb-(--spacing-section)">
         <Container>
           {insight.status === "sample" ? (
             <PlaceholderNote className="mb-12">

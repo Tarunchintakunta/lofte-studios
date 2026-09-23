@@ -9,6 +9,24 @@ award, or a credential.** Where a fact is missing, the page says so in a
 labelled note rather than filling the space. That is deliberate, and it is the
 reason this list exists.
 
+## Recorded deviation from the brief
+
+**The site is light. `DESIGN_BRIEF.md` specifies ink as the main background.**
+The studio asked for a light theme after the first build, so this was changed
+deliberately. Consequences worth knowing:
+
+- The closing CTA is a blue-_tinted_ light field, not a solid `#284BFF` band.
+  A full-bleed brand blue has a relative luminance of 0.127 — it reads as a
+  dark field, which is what was being moved away from. Blue now appears only on
+  buttons, links, and small marks.
+- Coral survives only as `#C43E28`. The brief's `#FF735D` is 2.36:1 on paper
+  and cannot be used for anything a reader has to see.
+- `.surface-ink` is still defined and still correct. If a single dark section
+  is ever wanted back, it is one prop on one `<Section>`.
+
+If the brief is the authority rather than the request, this is the item to
+revisit first.
+
 ---
 
 ## 1. Blocking — the site should not go live without these

@@ -148,3 +148,68 @@ pnpm shots        # full-page captures → screenshots/ at 375/768/1280/1536
 ```
 
 > Nothing has been committed yet — the kit asks for explicit approval before any commit.
+
+---
+
+# Recovery pass — deliberate zoom + proof of a running site
+
+Triggered by the recovery brief. Three requirements in it are genuinely absent
+from the build; everything else in the brief was already implemented and is
+re-verified below rather than re-argued.
+
+## Gap analysis
+
+| Requirement                                     | State before this pass                                         |
+| ----------------------------------------------- | -------------------------------------------------------------- |
+| Hero zoom, `1.08–1.12 → 1` on entry             | **Missing.** The field resolved from scatter but never scaled. |
+| Pinned editorial feature zoom, `0.86 → 1.03`    | **Missing.** No pinned section existed anywhere.               |
+| Work-card zoom, hover-only, max `1.04`, clipped | **Missing.** Cards changed border and title colour only.       |
+| Proof the site runs locally                     | Not previously demonstrated end to end.                        |
+| Everything else in the brief                    | Already built and covered by 83 tests.                         |
+
+## Checklist
+
+- [x] **Hero zoom.** The plate settles `1.10 → 1` over 1.9s while the fragments travel in. Its wrapper clips, so fragments arrive from off-frame and the oversized start never reaches the headline column.
+- [x] **Editorial feature zoom.** New `FeatureZoom` section, pinned from 768px up, frame scrubbing `0.86 → 1.03`. `pinType: "transform"` — `body` carries `overflow-x: clip`, which can make the body a containing block and leave a `position: fixed` pin scrolling away. Below 768px the pin is replaced by a short non-pinned reveal.
+- [x] **Work-card zoom.** Three duplicated card layouts collapsed into one `WorkCard`. The `1.04` scale lives in `.media-frame` / `.media-zoom` in CSS, gated on `(hover: hover) and (pointer: fine)` AND `prefers-reduced-motion: no-preference`, with a matching `:focus-visible` rule so keyboard users get the same affordance.
+- [x] **Guard rails.** Verified: no horizontal overflow while a card is hovered; the pin holds under a viewport of extra scroll; every zoom is off under reduced motion.
+- [x] **Tests:** `zoom.smoke.spec.ts`, 8 cases across both ends of each range plus the degraded states. The pin range is read from the pin-spacer rather than guessed — the first version sampled past the pin end and captured a misleading "end" frame.
+- [x] **Completion gate** delivered.
+
+## Light theme — deviation from DESIGN_BRIEF.md
+
+The studio asked for a light site. `DESIGN_BRIEF.md` specifies ink as the main
+background, so this is a **deliberate, recorded departure** rather than a
+misreading, and it is listed in `LAUNCH_CHECKLIST.md`.
+
+Because colour was already surface-aware, the flip was a token change rather
+than a rewrite. Four light fields now carry the rhythm:
+
+| Field        | Value     | Used for                               |
+| ------------ | --------- | -------------------------------------- |
+| `chalk`      | `#FBFAF5` | alternating sections                   |
+| `paper`      | `#F4F1E8` | the main field (the brief's own paper) |
+| `paper-deep` | `#EDEADF` | footer, raised panels                  |
+| `wash`       | `#DCDDEB` | the closing invitation                 |
+
+- Ink is now a **type** colour, not a ground. Contrast re-measured: body text clears 13.18:1 on every field, secondary ≥5.53:1, tertiary ≥4.83:1.
+- `--color-slate-dim` was darkened `#666B6F → #5F666D`; the old value fell to **4.47:1** on `paper-deep` and would have failed AA.
+- The closing CTA is **no longer a solid blue band**. `#284BFF` has a relative luminance of 0.127 — a full-bleed field of it is genuinely dark, which is what was being asked against. Blue is now spent on buttons, links, and marks only.
+- The signal system gained its own role tokens (`--signal-quiet/strong/accent/head/plate`) so the hero field and the work plates recolour with whatever field they sit on. `.surface-ink` is retained and still correct, so a dark section can be brought back with one prop.
+
+## GSAP
+
+`gsap` was already a dependency. Added **`@gsap/react`** and adopted `useGSAP`
+in `SignalField`, `Method`, and `FeatureZoom` — it scopes selectors and reverts
+timelines and ScrollTriggers on unmount without the hand-rolled
+`gsap.context()` + `useIsomorphicLayoutEffect` pairing.
+
+## Verified — recovery pass
+
+```
+pnpm lint       clean
+pnpm typecheck  clean
+pnpm build      succeeded — 22 routes
+pnpm test:e2e   153 passed (91 smoke + 62 capture)
+curl :3000      HTTP 200
+```

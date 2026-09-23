@@ -26,7 +26,7 @@ export default async function NotesPage() {
         standfirst="Occasional writing on content, craft, and the decisions behind the work. We publish when there is something worth saying rather than to a calendar."
       />
 
-      <Section surface="ink" size="none" className="pb-(--spacing-section)">
+      <Section surface="paper" size="none" className="pb-(--spacing-section)">
         <Container>
           {published.length > 0 ? (
             <ul className="border-rule border-t">

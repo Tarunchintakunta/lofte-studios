@@ -30,7 +30,7 @@ export default async function ServicesPage() {
         }
       />
 
-      <Section surface="ink" size="tight">
+      <Section surface="paper" size="tight">
         <Container>
           <ul>
             {services.map((service, index) => (

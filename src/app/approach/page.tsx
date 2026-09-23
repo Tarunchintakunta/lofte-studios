@@ -21,7 +21,7 @@ export default function ApproachPage() {
         standfirst="Not a methodology to be sold. Just the order the decisions have to be made in, written down so a client can see where a project is and what happens next."
       />
 
-      <Section surface="ink" size="none" className="pb-(--spacing-section)">
+      <Section surface="paper" size="none" className="pb-(--spacing-section)">
         <Container>
           <ol className="border-rule border-t">
             {methodSteps.map((step) => (
@@ -47,7 +47,7 @@ export default function ApproachPage() {
         </Container>
       </Section>
 
-      <Section surface="paper" labelledBy="engage-heading">
+      <Section surface="chalk" labelledBy="engage-heading">
         <Container>
           <SectionHead
             id="engage-heading"

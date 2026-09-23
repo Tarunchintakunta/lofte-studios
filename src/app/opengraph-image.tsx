@@ -39,19 +39,19 @@ export default function OpengraphImage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#07111e",
+        background: "#f4f1e8",
         padding: 72,
-        color: "#f4f1e8",
+        color: "#07111e",
         fontFamily: "sans-serif",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 30 }}>
         <div style={{ display: "flex", fontWeight: 600 }}>
           <div style={{ display: "flex" }}>L</div>
-          <div style={{ display: "flex", color: "#6ca9ff" }}>ø</div>
+          <div style={{ display: "flex", color: "#284bff" }}>ø</div>
           <div style={{ display: "flex" }}>fte</div>
         </div>
-        <div style={{ display: "flex", color: "#8697a9", fontWeight: 600 }}>Studios</div>
+        <div style={{ display: "flex", color: "#5f666d", fontWeight: 600 }}>Studios</div>
       </div>
 
       <div style={{ display: "flex", alignItems: "flex-end", gap: 56 }}>
@@ -74,7 +74,7 @@ export default function OpengraphImage() {
               marginTop: 28,
               fontSize: 27,
               lineHeight: 1.4,
-              color: "#b8c6d5",
+              color: "#4a5258",
               maxWidth: 640,
             }}
           >
@@ -91,14 +91,14 @@ export default function OpengraphImage() {
             paddingBottom: 14,
           }}
         >
-          <div style={{ height: 8, width: 300, background: "#f4f1e8", opacity: 0.8 }} />
+          <div style={{ height: 8, width: 300, background: "#07111e", opacity: 0.85 }} />
           {rules.map((rule) => (
             <div
               key={rule.w}
-              style={{ height: 4, width: rule.w, background: "#b8c6d5", opacity: rule.o }}
+              style={{ height: 4, width: rule.w, background: "#4a5258", opacity: rule.o }}
             />
           ))}
-          <div style={{ height: 5, width: 240, background: "#6ca9ff", opacity: 0.9 }} />
+          <div style={{ height: 5, width: 240, background: "#284bff", opacity: 0.95 }} />
         </div>
       </div>
     </div>,

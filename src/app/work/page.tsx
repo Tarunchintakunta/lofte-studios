@@ -3,7 +3,7 @@ import { Container, Section } from "@/components/layout/Section";
 import { PageHero } from "@/components/layout/PageHero";
 import { ClosingCta } from "@/components/sections/ClosingCta";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
-import { WorkPlate } from "@/components/signal/WorkPlate";
+import { WorkCard } from "@/components/work/WorkCard";
 import { cn } from "@/lib/cn";
 import { pageMetadata } from "@/lib/metadata";
 import { capabilities, type CapabilitySlug } from "@/content/capabilities";
@@ -42,7 +42,7 @@ export default async function WorkPage(props: PageProps<"/work">) {
         standfirst="Each piece is published only once the client has approved the work, the credit, and any result shown alongside it."
       />
 
-      <Section surface="ink" size="none" className="pb-(--spacing-section)">
+      <Section surface="paper" size="none" className="pb-(--spacing-section)">
         <Container>
           <nav
             aria-label="Filter work by capability"
@@ -99,27 +99,7 @@ export default async function WorkPage(props: PageProps<"/work">) {
           ) : (
             <div className="mt-10 grid gap-x-8 gap-y-12 md:grid-cols-2">
               {filtered.map((study, index) => (
-                <article key={study.slug}>
-                  <Link href={`/work/${study.slug}`} className="group block">
-                    <div className="border-rule group-hover:border-fg-subtle aspect-[16/10] w-full overflow-hidden border transition-colors duration-[--duration-base]">
-                      <WorkPlate seed={index + 1} />
-                    </div>
-                    <h2 className="text-heading-1 font-display group-hover:text-accent mt-5 transition-colors duration-[--duration-base]">
-                      {study.status === "published" ? study.title : study.reservedTitle}
-                    </h2>
-                  </Link>
-                  <p className="text-body-sm text-fg-muted measure mt-2">
-                    {study.status === "published"
-                      ? study.challenge
-                      : study.reservedSummary}
-                  </p>
-                  <p className="text-micro text-fg-subtle mt-3">
-                    {study.capabilities
-                      .map((slug) => capabilities.find((c) => c.slug === slug)?.name)
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </p>
-                </article>
+                <WorkCard key={study.slug} study={study} seed={index + 1} />
               ))}
             </div>
           )}

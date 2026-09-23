@@ -5,7 +5,11 @@ import { primaryNav } from "@/lib/site";
 
 export default function NotFound() {
   return (
-    <Section surface="ink" size="none" className="pt-40 pb-(--spacing-section) md:pt-48">
+    <Section
+      surface="paper"
+      size="none"
+      className="pt-40 pb-(--spacing-section) md:pt-48"
+    >
       <Container>
         <p className="text-body-sm text-fg-subtle">404</p>
         <h1 className="optical-left text-display-2 mt-5 max-w-[16ch]">

@@ -5,33 +5,45 @@
    --------------------------------------------------------------------------
    One source of truth. Components never reach for raw hex values.
 
+   THEME: LIGHT. The site runs on paper fields, with ink reserved for type,
+   rules, and marks. This is a deliberate departure from DESIGN_BRIEF.md, which
+   specifies ink as the main background — the studio asked for a light site.
+   `.surface-ink` is kept defined and correct so the dark field can be brought
+   back for a single section without touching a component.
+
    Colour is organised in two layers:
    1. Brand constants (`--color-*`) — the fixed palette from DESIGN_BRIEF.md
-      plus the few derived tones needed to keep text legible on both fields.
-   2. Surface-aware semantics (`--fg`, `--bg`, `--rule`, …) — re-declared by
-      `.surface-ink` / `.surface-paper` so a section can be flipped between the
-      two editorial fields without touching a single component.
+      plus the tones needed to keep text legible on a light ground.
+   2. Surface-aware semantics (`--fg`, `--bg`, `--rule`, `--signal-*`) —
+      re-declared by each `.surface-*` class, so a section can be flipped
+      between fields without touching a single component.
 
    Every foreground/background pair below was measured. Ratios noted inline.
    ========================================================================== */
 
 @theme {
-  /* --- Brand constants ---------------------------------------------- */
-  --color-ink: #07111e; /* main background */
-  --color-ink-raised: #101a27; /* lifted panel on ink */
-  --color-ink-sunken: #040b14; /* inset / footer well */
-  --color-blue: #284bff; /* active surfaces + decisive CTAs ONLY.
-                              3.20:1 on ink — never use as body text there. */
-  --color-blue-deep: #1c3ae0; /* link text on paper (6.81:1), CTA hover */
-  --color-sky: #6ca9ff; /* light signal highlight, links on ink (7.90:1) */
-  --color-paper: #f4f1e8; /* quiet editorial background */
-  --color-paper-raised: #eae7dc;
-  --color-coral: #ff735d; /* rare accent. 7.10:1 on ink; fails on paper. */
-  --color-coral-deep: #c43e28; /* the only coral permitted on paper (4.57:1) */
+  /* --- Light fields --------------------------------------------------- */
+  --color-chalk: #fbfaf5; /* lightest field */
+  --color-paper: #f4f1e8; /* the brief's paper — the main field */
+  --color-paper-deep: #edeadf; /* footer and raised panels */
+  --color-wash: #dcddeb; /* blue-tinted field for the invitation */
+
+  /* --- Ink, now a type colour rather than a ground -------------------- */
+  --color-ink: #07111e; /* primary text — 16.78:1 on paper */
+  --color-ink-raised: #101a27;
+  --color-ink-sunken: #040b14;
+
+  /* --- Brand constants ------------------------------------------------ */
+  --color-blue: #284bff; /* decisive CTAs and active surfaces */
+  --color-blue-deep: #1c3ae0; /* link text on light (6.81:1), CTA hover */
+  --color-sky: #6ca9ff; /* highlight on ink only — fails on paper */
+  --color-coral: #ff735d; /* on ink only — 2.36:1 on paper */
+  --color-coral-deep: #c43e28; /* the only coral permitted on light (4.57:1) */
   --color-mist: #b8c6d5; /* subdued text on ink (10.90:1) */
-  --color-mist-dim: #8697a9; /* tertiary text on ink */
-  --color-slate: #4a5258; /* secondary text on paper (≈6.8:1) */
-  --color-slate-dim: #666b6f; /* tertiary text on paper (4.77:1) */
+  --color-mist-dim: #8697a9;
+  --color-slate: #4a5258; /* secondary text on light (7.05:1 on paper) */
+  --color-slate-dim: #5f666d; /* tertiary — clears AA on all three light
+                                  fields (5.57 / 5.15 / 4.83) */
 
   /* --- Typography ---------------------------------------------------- */
   --font-display: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
@@ -86,8 +98,7 @@
   --spacing-section: clamp(4.5rem, 2.5634rem + 8.2629vw, 10rem); /* 72 → 160 */
   --spacing-section-tight: clamp(3rem, 1.9366rem + 4.5399vw, 6rem);
 
-  /* --- Motion --------------------------------------------------------
-     Shared with GSAP via `readMotionTokens()` so CSS and JS never drift. */
+  /* --- Motion --------------------------------------------------------- */
   --ease-signal: cubic-bezier(0.22, 1, 0.36, 1); /* decisive settle */
   --ease-quiet: cubic-bezier(0.4, 0, 0.2, 1);
   --duration-fast: 160ms;
@@ -114,10 +125,67 @@
   --color-accent: var(--accent);
   --color-accent-quiet: var(--accent-quiet);
   --color-focus: var(--focus);
+
+  /* The signal system's own palette, so the hero field and the work plates
+     recolour with the field they sit on instead of hard-coding ink tones. */
+  --color-signal-quiet: var(--signal-quiet);
+  --color-signal-strong: var(--signal-strong);
+  --color-signal-accent: var(--signal-accent);
+  --color-signal-head: var(--signal-head);
+  --color-signal-plate: var(--signal-plate);
 }
 
-/* --- Ink field (default) ------------------------------------------- */
+/* --- Shared light semantics ------------------------------------------ */
 :root,
+.surface-paper,
+.surface-chalk,
+.surface-deep,
+.surface-wash {
+  --fg: var(--color-ink); /* ≥13.18:1 on every light field */
+  --fg-muted: var(--color-slate); /* ≥5.53:1 */
+  --fg-subtle: var(--color-slate-dim); /* ≥4.83:1 */
+  --rule: color-mix(in oklab, var(--color-ink) 13%, transparent);
+  --rule-strong: color-mix(in oklab, var(--color-ink) 28%, transparent);
+  --accent: var(--color-blue-deep); /* 6.81:1 — link text on light */
+  --accent-quiet: var(--color-blue);
+  --focus: var(--color-blue-deep);
+  color-scheme: light;
+
+  /* Signal field, drawn in ink and brand blue rather than mist and sky. */
+  --signal-quiet: var(--color-slate);
+  --signal-strong: var(--color-blue);
+  --signal-accent: var(--color-coral-deep);
+  --signal-head: var(--color-ink);
+  --signal-plate: var(--color-paper-deep);
+}
+
+:root,
+.surface-paper {
+  --bg: var(--color-paper);
+  --bg-raised: var(--color-paper-deep);
+}
+
+.surface-chalk {
+  --bg: var(--color-chalk);
+  --bg-raised: var(--color-paper);
+}
+
+.surface-deep {
+  --bg: var(--color-paper-deep);
+  --bg-raised: var(--color-chalk);
+}
+
+/* The invitation. Blue-tinted rather than blue-filled: a solid #284BFF band
+   is a genuinely dark field, and this site is a light one. */
+.surface-wash {
+  --bg: var(--color-wash);
+  --bg-raised: var(--color-chalk);
+  --rule: color-mix(in oklab, var(--color-ink) 16%, transparent);
+  --rule-strong: color-mix(in oklab, var(--color-ink) 32%, transparent);
+  --signal-plate: color-mix(in oklab, var(--color-wash) 70%, var(--color-chalk));
+}
+
+/* --- Ink field: retained, correct, currently unused ------------------- */
 .surface-ink {
   --bg: var(--color-ink);
   --bg-raised: var(--color-ink-raised);
@@ -130,36 +198,12 @@
   --accent-quiet: var(--color-blue);
   --focus: var(--color-sky);
   color-scheme: dark;
-}
 
-/* --- Paper field ---------------------------------------------------- */
-.surface-paper {
-  --bg: var(--color-paper);
-  --bg-raised: var(--color-paper-raised);
-  --fg: var(--color-ink); /* 16.78:1 */
-  --fg-muted: var(--color-slate); /* ≈6.8:1  */
-  --fg-subtle: var(--color-slate-dim); /* 4.77:1  */
-  --rule: color-mix(in oklab, var(--color-ink) 14%, transparent);
-  --rule-strong: color-mix(in oklab, var(--color-ink) 30%, transparent);
-  --accent: var(--color-blue-deep); /* 6.81:1 — link text on paper */
-  --accent-quiet: var(--color-blue);
-  --focus: var(--color-blue-deep);
-  color-scheme: light;
-}
-
-/* --- Blue field: used sparingly, for a decisive invitation ---------- */
-.surface-blue {
-  --bg: var(--color-blue);
-  --bg-raised: var(--color-blue-deep);
-  --fg: #ffffff; /* 5.93:1 */
-  --fg-muted: color-mix(in oklab, #ffffff 86%, var(--color-ink));
-  --fg-subtle: color-mix(in oklab, #ffffff 72%, var(--color-ink));
-  --rule: color-mix(in oklab, #ffffff 26%, transparent);
-  --rule-strong: color-mix(in oklab, #ffffff 48%, transparent);
-  --accent: #ffffff;
-  --accent-quiet: var(--color-sky);
-  --focus: #ffffff;
-  color-scheme: dark;
+  --signal-quiet: var(--color-mist);
+  --signal-strong: var(--color-sky);
+  --signal-accent: var(--color-coral);
+  --signal-head: var(--color-paper);
+  --signal-plate: var(--color-ink-raised);
 }
 
 /* ==========================================================================
@@ -203,7 +247,7 @@
     text-wrap: pretty;
   }
 
-  /* One visible, high-contrast focus treatment everywhere, on both fields. */
+  /* One visible, high-contrast focus treatment everywhere, on every field. */
   :focus-visible {
     outline: 2px solid var(--focus);
     outline-offset: 3px;
@@ -281,20 +325,6 @@
   width: 100%;
 }
 
-/* ==========================================================================
-   Motion
-   --------------------------------------------------------------------------
-   Elements a GSAP timeline will animate start hidden ONLY when JS is running
-   and motion is allowed. Without JS — and under reduced motion — the `.signal-*`
-   classes are inert, so content renders in full, in document order.
-   ========================================================================== */
-
-@media (prefers-reduced-motion: no-preference) {
-  html.js .signal-hidden {
-    opacity: 0;
-  }
-}
-
 /* --------------------------------------------------------------------------
    Disclosure
    --------------------------------------------------------------------------
@@ -320,6 +350,53 @@
 
   details[open]::details-content {
     block-size: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Media zoom
+   --------------------------------------------------------------------------
+   Portfolio media grows slightly inside a clipped frame. Written as plain CSS
+   rather than utilities because it is gated three ways and the gating is the
+   point:
+
+   - only where a pointer can genuinely hover, so a touch device never gets a
+     state it cannot leave;
+   - only when motion is welcome;
+   - and with a matching `:focus-visible` state, so a keyboard user gets the
+     same affordance instead of nothing at all.
+
+   Capped at 1.04. Transform-only, inside `overflow: hidden`, so it composites
+   on the GPU and cannot move a single neighbour.
+   -------------------------------------------------------------------------- */
+
+.media-zoom {
+  transition: transform var(--duration-slow) var(--ease-quiet);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) and (pointer: fine) {
+    .media-frame:hover .media-zoom {
+      transform: scale(1.04);
+    }
+  }
+
+  .media-frame:focus-visible .media-zoom {
+    transform: scale(1.04);
+  }
+}
+
+/* ==========================================================================
+   Motion
+   --------------------------------------------------------------------------
+   Elements a GSAP timeline will animate start hidden ONLY when JS is running
+   and motion is allowed. Without JS — and under reduced motion — the `.signal-*`
+   classes are inert, so content renders in full, in document order.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  html.js .signal-hidden {
+    opacity: 0;
   }
 }
 

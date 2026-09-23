@@ -12,7 +12,7 @@ import { capabilities } from "@/content/capabilities";
  */
 export function Capabilities() {
   return (
-    <Section surface="ink" id="capabilities" labelledBy="capabilities-heading">
+    <Section surface="paper" id="capabilities" labelledBy="capabilities-heading">
       <Container>
         <SectionHead
           id="capabilities-heading"

@@ -5,7 +5,7 @@ import { PageHero } from "@/components/layout/PageHero";
 import { ClosingCta } from "@/components/sections/ClosingCta";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
 import { TextLink } from "@/components/ui/TextLink";
-import { WorkPlate } from "@/components/signal/WorkPlate";
+import { WorkCard } from "@/components/work/WorkCard";
 import { BreadcrumbSchema, ServiceSchema } from "@/components/seo/StructuredData";
 import { pageMetadata } from "@/lib/metadata";
 import { getCaseStudies, getService, getServices } from "@/lib/content";
@@ -56,7 +56,7 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
         standfirst={service.summary}
       />
 
-      <Section surface="paper" labelledBy="solves-heading">
+      <Section surface="chalk" labelledBy="solves-heading">
         <Container>
           <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
@@ -82,7 +82,7 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
         </Container>
       </Section>
 
-      <Section surface="ink" labelledBy="process-heading">
+      <Section surface="paper" labelledBy="process-heading">
         <Container>
           <SectionHead
             id="process-heading"
@@ -148,7 +148,7 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
         </Container>
       </Section>
 
-      <Section surface="ink" size="tight" labelledBy="service-work-heading">
+      <Section surface="paper" size="tight" labelledBy="service-work-heading">
         <Container>
           <SectionHead
             id="service-work-heading"
@@ -161,19 +161,12 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
           />
           <div className="mt-10 grid gap-x-8 gap-y-10 md:grid-cols-2">
             {related.slice(0, 2).map((study, index) => (
-              <article key={study.slug}>
-                <Link href={`/work/${study.slug}`} className="group block">
-                  <div className="border-rule group-hover:border-fg-subtle aspect-[16/10] w-full overflow-hidden border transition-colors duration-[--duration-base]">
-                    <WorkPlate seed={index + 4} />
-                  </div>
-                  <h3 className="text-heading-1 font-display group-hover:text-accent mt-5 transition-colors duration-[--duration-base]">
-                    {study.status === "published" ? study.title : study.reservedTitle}
-                  </h3>
-                </Link>
-                <p className="text-body-sm text-fg-muted measure mt-2">
-                  {study.status === "published" ? study.challenge : study.reservedSummary}
-                </p>
-              </article>
+              <WorkCard
+                key={study.slug}
+                study={study}
+                seed={index + 4}
+                headingLevel={3}
+              />
             ))}
           </div>
           {!hasPublishedWork ? (
@@ -186,7 +179,7 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
       </Section>
 
       {service.faq && service.faq.length > 0 ? (
-        <Section surface="paper" labelledBy="faq-heading">
+        <Section surface="chalk" labelledBy="faq-heading">
           <Container>
             <SectionHead id="faq-heading" heading="Questions we get asked." />
             <div className="mt-10 lg:max-w-[52rem]">

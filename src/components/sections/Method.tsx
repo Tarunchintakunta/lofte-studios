@@ -3,9 +3,10 @@
 import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { Container, Section } from "@/components/layout/Section";
 import { cn } from "@/lib/cn";
-import { prefersReducedMotion, useIsomorphicLayoutEffect } from "@/lib/motion";
+import { prefersReducedMotion } from "@/lib/motion";
 import { methodSteps } from "@/content/method";
 
 /**
@@ -26,13 +27,11 @@ export function Method() {
   const progressRef = useRef<HTMLSpanElement | null>(null);
   const [active, setActive] = useState(0);
 
-  useIsomorphicLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root || prefersReducedMotion()) return;
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+      gsap.registerPlugin(ScrollTrigger);
 
-    gsap.registerPlugin(ScrollTrigger);
-
-    const context = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>("[data-step]").forEach((block, index) => {
         ScrollTrigger.create({
           trigger: block,
@@ -62,13 +61,12 @@ export function Method() {
           },
         );
       }
-    }, root);
-
-    return () => context.revert();
-  }, []);
+    },
+    { scope: rootRef },
+  );
 
   return (
-    <Section surface="ink" id="method" labelledBy="method-heading">
+    <Section surface="paper" id="method" labelledBy="method-heading">
       <Container>
         <div ref={rootRef} className="grid gap-x-12 lg:grid-cols-12">
           <div className="lg:col-span-4">

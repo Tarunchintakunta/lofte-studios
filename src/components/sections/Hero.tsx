@@ -11,7 +11,7 @@ import { cta } from "@/lib/site";
  */
 export function Hero() {
   return (
-    <Section surface="ink" size="none" className="overflow-hidden">
+    <Section surface="paper" size="none" className="overflow-hidden">
       <Container className="relative pt-32 pb-(--spacing-section-tight) md:pt-40 lg:min-h-[86svh] lg:pt-44">
         <div className="grid items-center gap-y-14 lg:h-full lg:grid-cols-12 lg:gap-x-10">
           <div className="lg:col-span-6 xl:col-span-6">

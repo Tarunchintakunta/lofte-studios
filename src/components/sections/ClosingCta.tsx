@@ -8,7 +8,7 @@ import { cta } from "@/lib/site";
  */
 export function ClosingCta() {
   return (
-    <Section surface="blue" labelledBy="closing-heading">
+    <Section surface="wash" labelledBy="closing-heading">
       <Container>
         <div className="grid items-end gap-x-12 gap-y-8 lg:grid-cols-12">
           <h2 id="closing-heading" className="optical-left text-display-2 lg:col-span-7">

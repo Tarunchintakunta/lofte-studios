@@ -108,10 +108,11 @@ function compose(seed: number, ratio: PlateRatio) {
   return { view, figure, lines };
 }
 
+/** Roles, resolved through the current surface — see SignalField. */
 const TONE: Record<string, string> = {
-  mist: "var(--color-mist)",
-  sky: "var(--color-sky)",
-  paper: "var(--color-paper)",
+  mist: "var(--signal-quiet)",
+  sky: "var(--signal-strong)",
+  paper: "var(--signal-head)",
 };
 
 export function WorkPlate({
@@ -131,17 +132,17 @@ export function WorkPlate({
       preserveAspectRatio="xMidYMid slice"
       aria-hidden="true"
       focusable="false"
-      className={cn("bg-ink-raised h-full w-full", className)}
+      className={cn("bg-signal-plate h-full w-full", className)}
     >
       <rect
         x={figure.x}
         y={figure.y}
         width={figure.w}
         height={figure.h}
-        fill="var(--color-blue)"
-        fillOpacity={0.16}
-        stroke="var(--color-mist)"
-        strokeOpacity={0.3}
+        fill="var(--signal-strong)"
+        fillOpacity={0.12}
+        stroke="var(--signal-quiet)"
+        strokeOpacity={0.36}
         strokeWidth={1}
         vectorEffect="non-scaling-stroke"
       />

@@ -80,7 +80,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
         ) : null}
       </PageHero>
 
-      <Section surface="ink" size="tight">
+      <Section surface="paper" size="tight">
         <Container>
           <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
             <div className="lg:col-span-7">

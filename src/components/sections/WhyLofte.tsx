@@ -92,7 +92,7 @@ function HandoffDiagram() {
 
 export function WhyLofte() {
   return (
-    <Section surface="paper" labelledBy="why-heading">
+    <Section surface="chalk" labelledBy="why-heading">
       <Container>
         <SectionHead
           id="why-heading"

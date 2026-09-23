@@ -2,48 +2,69 @@
 
 import { useRef } from "react";
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/cn";
-import { prefersReducedMotion, useIsomorphicLayoutEffect } from "@/lib/motion";
+import { prefersReducedMotion } from "@/lib/motion";
 import { FIELD, VIEW, type Tone } from "./geometry";
 
+/**
+ * Tone names are roles, not colours. Each resolves through the surface the
+ * field is sitting on, so the same geometry reads correctly on a light ground
+ * or an ink one without a second component.
+ */
 const TONE_FILL: Record<Tone, string> = {
-  mist: "var(--color-mist)",
-  sky: "var(--color-sky)",
-  coral: "var(--color-coral)",
-  paper: "var(--color-paper)",
+  mist: "var(--signal-quiet)",
+  sky: "var(--signal-strong)",
+  coral: "var(--signal-accent)",
+  paper: "var(--signal-head)",
 };
 
 /**
  * The hero's signal field: scattered fragments of information resolving into a
  * single editorial register, once, on load.
  *
+ * Two movements run together. The whole plate settles from `1.10` to `1` — a
+ * camera easing back rather than a zoom effect — while the fragments travel in
+ * from their scattered offsets. The wrapper clips, so fragments arrive from
+ * outside the frame and the oversized start never bleeds into the headline
+ * column.
+ *
  * Decorative, so it is hidden from assistive technology — the hero carries its
  * meaning in the headline. The markup is the RESOLVED composition; GSAP
- * animates *from* the scattered offsets, which means no-JS and reduced-motion
- * visitors land on the finished state instead of an unresolved mess.
+ * animates *from* the scatter and *from* the larger scale, which means no-JS
+ * and reduced-motion visitors land on the finished state at scale 1 instead of
+ * an unresolved mess.
  */
 export function SignalField({ className }: { className?: string }) {
-  const rootRef = useRef<SVGSVGElement | null>(null);
+  const frameRef = useRef<HTMLDivElement | null>(null);
+  const plateRef = useRef<SVGSVGElement | null>(null);
 
-  useIsomorphicLayoutEffect(() => {
-    const root = rootRef.current;
-    if (!root || prefersReducedMotion()) return;
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
 
-    const context = gsap.context(() => {
-      const timeline = gsap.timeline({
-        defaults: { ease: "power3.out" },
-        // Nothing here is load-bearing; if the tab is hidden it simply resolves.
-        paused: false,
-      });
+      const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       timeline
-        .from("[data-plane]", {
-          opacity: 0,
-          scaleY: 0.72,
-          transformOrigin: "center",
-          duration: 0.9,
-          stagger: 0.1,
+        // The settle. Transform-only, so it composites on the GPU and cannot
+        // shift the layout around it.
+        .from(plateRef.current, {
+          scale: 1.1,
+          transformOrigin: "50% 45%",
+          duration: 1.9,
+          ease: "power2.out",
         })
+        .from(
+          "[data-plane]",
+          {
+            opacity: 0,
+            scaleY: 0.72,
+            transformOrigin: "center",
+            duration: 0.9,
+            stagger: 0.1,
+          },
+          0,
+        )
         .from(
           "[data-fragment]",
           {
@@ -82,90 +103,95 @@ export function SignalField({ className }: { className?: string }) {
           "-=0.35",
         )
         .to("[data-signal]", { opacity: 0, duration: 0.45 }, "-=0.2");
-    }, root);
-
-    return () => context.revert();
-  }, []);
+    },
+    { scope: frameRef },
+  );
 
   return (
-    <svg
-      ref={rootRef}
-      viewBox={`0 0 ${VIEW.w} ${VIEW.h}`}
-      preserveAspectRatio="xMidYMid meet"
-      aria-hidden="true"
-      focusable="false"
-      className={cn("h-full w-full overflow-visible", className)}
+    <div
+      ref={frameRef}
+      className={cn("h-full w-full overflow-hidden", className)}
+      data-signal-frame
     >
-      <defs>
-        <linearGradient id="lofte-signal-sweep" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0%" stopColor="var(--color-sky)" stopOpacity="0" />
-          <stop offset="55%" stopColor="var(--color-sky)" stopOpacity="1" />
-          <stop offset="100%" stopColor="var(--color-sky)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
+      <svg
+        ref={plateRef}
+        viewBox={`0 0 ${VIEW.w} ${VIEW.h}`}
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden="true"
+        focusable="false"
+        className="h-full w-full"
+      >
+        <defs>
+          <linearGradient id="lofte-signal-sweep" x1="0" x2="1" y1="0" y2="0">
+            <stop offset="0%" stopColor="var(--signal-strong)" stopOpacity="0" />
+            <stop offset="55%" stopColor="var(--signal-strong)" stopOpacity="1" />
+            <stop offset="100%" stopColor="var(--signal-strong)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
 
-      {/* Image planes sit behind, so information reads as sitting over media. */}
-      <g>
-        {FIELD.planes.map((plane) => (
-          <rect
-            key={plane.id}
-            data-plane
-            x={plane.x}
-            y={plane.y}
-            width={plane.w}
-            height={plane.h}
-            fill="var(--color-blue)"
-            fillOpacity={0.16}
-            stroke="var(--color-mist)"
-            strokeOpacity={0.32}
-            strokeWidth={1}
-            vectorEffect="non-scaling-stroke"
-          />
-        ))}
-      </g>
+        {/* Image planes sit behind, so information reads as sitting over media. */}
+        <g>
+          {FIELD.planes.map((plane) => (
+            <rect
+              key={plane.id}
+              data-plane
+              x={plane.x}
+              y={plane.y}
+              width={plane.w}
+              height={plane.h}
+              fill="var(--signal-strong)"
+              fillOpacity={0.12}
+              stroke="var(--signal-quiet)"
+              strokeOpacity={0.38}
+              strokeWidth={1}
+              vectorEffect="non-scaling-stroke"
+            />
+          ))}
+        </g>
 
-      <g>
-        {FIELD.fragments.map((fragment) => (
-          <rect
-            key={fragment.id}
-            data-fragment
-            data-sx={fragment.scatter.x}
-            data-sy={fragment.scatter.y}
-            data-sr={fragment.scatter.rotate}
-            x={fragment.x}
-            y={fragment.y}
-            width={fragment.w}
-            height={fragment.h}
-            fill={TONE_FILL[fragment.tone]}
-            fillOpacity={fragment.opacity}
-          />
-        ))}
-      </g>
+        <g>
+          {FIELD.fragments.map((fragment) => (
+            <rect
+              key={fragment.id}
+              data-fragment
+              data-sx={fragment.scatter.x}
+              data-sy={fragment.scatter.y}
+              data-sr={fragment.scatter.rotate}
+              x={fragment.x}
+              y={fragment.y}
+              width={fragment.w}
+              height={fragment.h}
+              fill={TONE_FILL[fragment.tone]}
+              fillOpacity={fragment.opacity}
+            />
+          ))}
+        </g>
 
-      <g>
-        {FIELD.nodes.map((node) => (
-          <circle
-            key={node.id}
-            data-node
-            cx={node.x}
-            cy={node.y}
-            r={node.r}
-            fill={TONE_FILL[node.tone]}
-            fillOpacity={node.tone === "sky" ? 0.95 : 0.6}
-          />
-        ))}
-      </g>
+        <g>
+          {FIELD.nodes.map((node) => (
+            <circle
+              key={node.id}
+              data-node
+              cx={node.x}
+              cy={node.y}
+              r={node.r}
+              fill={TONE_FILL[node.tone]}
+              fillOpacity={node.tone === "sky" ? 0.95 : 0.6}
+            />
+          ))}
+        </g>
 
-      {/* Starts off-stage and fully transparent; only GSAP ever moves it. */}
-      <rect
-        data-signal
-        x={FIELD.signal.from - 150}
-        y={FIELD.signal.y - 0.5}
-        width={150}
-        height={3}
-        fill="url(#lofte-signal-sweep)"
-        opacity={0}
-      />
-    </svg>
+        {/* Starts off-stage and fully transparent; only GSAP ever moves it. */}
+        <rect
+          data-signal
+          x={FIELD.signal.from - 150}
+          y={FIELD.signal.y - 0.5}
+          width={150}
+          height={3}
+          fill="url(#lofte-signal-sweep)"
+          opacity={0}
+        />
+      </svg>
+    </div>
   );
 }
