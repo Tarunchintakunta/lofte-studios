@@ -36,14 +36,69 @@ Use `Manrope` for navigation, body, controls, and small text. Use `DM Sans` or a
 
 ### Motion
 
-Use GSAP + ScrollTrigger only for significant moments:
+Motion is editorial, not decorative. Every moment below exists because it carries
+meaning that static layout cannot; nothing animates merely to prove the page can.
+
+#### The named moments
+
+Use GSAP + ScrollTrigger only for these:
 
 1. Hero signal field resolves once on load.
-2. The six-step Løfte process progresses as a scroll narrative.
-3. Case-study media shifts between clipped editorial frames.
-4. Service details expand/collapse because the visitor asks for more detail.
+2. **The "For" reel** — the word `For` is held while the audiences that complete
+   the sentence travel through a focal line. The kinetic list *is* the sentence.
+3. The six-step Løfte process progresses as a scroll narrative.
+4. **The zoom-through portal** — an aperture punched out of a sheet of paper is
+   scaled until the viewer is through it and standing in the dark room where the
+   work is shown. One continuous move from the promise to the proof.
+5. Case-study media shifts between clipped editorial frames.
+6. Service details expand/collapse because the visitor asks for more detail.
 
-No universal fade-up animation. No continuous decorative parallax. Respect `prefers-reduced-motion`; in that mode, reveal all content normally and remove scroll pinning.
+Moments 2 and 4 are cinematic and pin the viewport. That is a deliberate revision
+of this brief's earlier position that a long pin is always a trap — the studio
+asked for two moments with real scale. The revision is narrow: **two** pinned
+moments on the homepage, both of which arrive somewhere. It is not a licence for
+a third.
+
+Nothing here may be borrowed from Clear Street. The anti-generic rules below
+still bind: the aperture is Løfte's own ø read as a lens, the fields are ink and
+paper, and there is no dashboard motif anywhere in either moment.
+
+#### Rules that still bind
+
+- No universal fade-up animation. No continuous decorative parallax.
+- Respect `prefers-reduced-motion`: reveal all content normally, remove every
+  pin, and let the page read top to bottom. The same fallback serves visitors
+  with no JavaScript and every viewport under 768px — a phone is never pinned.
+- A pinned section must be reachable and readable without the pin. If content
+  only exists mid-scrub, it does not exist.
+
+#### How pinned motion has to feel
+
+Smoothness is a measured property, not a taste. The homepage holds these:
+
+- **Pin budget.** No single pin longer than ~200% of the viewport, and no more
+  than a quarter of the page's scroll height spent pinned in total. Today: 180%
+  for the portal, 200% for the reel.
+- **Scrub is short.** 0.4–0.6. A long scrub sounds like "smoother" and reads as
+  lag — at `scrub: 1` the reel's track ran 68px behind the scroll and the wrong
+  audience held the line for much of the sweep. At 0.45 it runs 30px behind.
+- **No dead scroll.** A pinned section may hold still at the end so the arrival
+  can be read, but only briefly. A long stretch where nothing responds reads as
+  a broken page.
+- **State changes must not stack their own lag** on top of the scrub. Focus and
+  highlight transitions use `--duration-fast`, not `--duration-base`.
+- **`scroll-behavior: smooth` is banned.** It animates every programmatic scroll,
+  which is exactly what ScrollTrigger performs when it engages a pin or restores
+  position — the two then animate against each other. Measured: one `scrollBy`
+  covered 564px in three seconds with `smooth`, against 12053px with `auto`.
+
+#### Navigation
+
+The floating bar tightens as the visitor reads downward and returns to full size
+the moment they scroll up, so navigation is always one upward flick away. It is
+driven by scroll *direction*, never by depth alone, and it does not engage in the
+first 140px of a page or under reduced motion. The bar's own box changes — never
+a transform on its contents, which would soften the type.
 
 ## Non-negotiable anti-generic rules
 

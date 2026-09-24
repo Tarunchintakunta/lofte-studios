@@ -27,6 +27,7 @@ export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [lifted, setLifted] = useState(false);
+  const [compact, setCompact] = useState(false);
 
   const menuId = useId();
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -45,6 +46,60 @@ export function Header() {
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
+  }, []);
+
+  /* --- Tighten the bar going down, give it back coming up ---------------
+     Direction, not depth. Reading downward is when the bar is most in the way,
+     and turning back up is almost always someone looking for navigation — so
+     it is never more than one upward flick from full size.
+
+     Three guards keep it from twitching: nothing happens in the first 140px,
+     so the top of a page is stable; a 10px threshold absorbs trackpad jitter
+     and rubber-banding; and the deltas accumulate, so a slow scroll still
+     crosses the threshold rather than being ignored forever.
+
+     Under reduced motion it does not engage at all. A size change *is* motion,
+     and an instant one on every direction change would be worse than none. */
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const ENGAGE_AFTER = 140;
+    const THRESHOLD = 10;
+
+    let lastY = window.scrollY;
+    let queued = false;
+
+    const read = () => {
+      queued = false;
+      const y = window.scrollY;
+      const delta = y - lastY;
+      if (Math.abs(delta) < THRESHOLD) return;
+      lastY = y;
+      // Same value is a no-op in React, so this does not re-render on scroll.
+      setCompact(delta > 0 && y > ENGAGE_AFTER);
+    };
+
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(read);
+    };
+
+    const sync = () => {
+      window.removeEventListener("scroll", onScroll);
+      if (query.matches) {
+        setCompact(false);
+        return;
+      }
+      lastY = window.scrollY;
+      window.addEventListener("scroll", onScroll, { passive: true });
+    };
+
+    sync();
+    query.addEventListener("change", sync);
+    return () => {
+      query.removeEventListener("change", sync);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   /* --- Close the mobile panel whenever the route changes ----------------
@@ -128,6 +183,10 @@ export function Header() {
     };
   }, [open]);
 
+  /* The open panel always gets the bar at full size — a compact bar above a
+     full-screen menu reads as the menu having opened by accident. */
+  const tight = compact && !open;
+
   return (
     <>
       <div ref={sentinelRef} aria-hidden="true" className="absolute top-0 h-px w-full" />
@@ -135,11 +194,18 @@ export function Header() {
       <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
         <div className="container-page">
           <div
+            data-compact={tight}
             className={cn(
-              "pointer-events-auto mt-3 flex items-center justify-between gap-4",
-              "rounded-capsule border py-2 pr-2 pl-4 md:mt-4 md:pl-6",
-              "transition-[background-color,border-color,backdrop-filter]",
+              "pointer-events-auto flex items-center justify-between gap-4",
+              "rounded-capsule border pr-2",
+              // The whole treatment is the bar's own box: nothing inside is
+              // scaled, so the type stays crisply rasterised at every size.
+              "transition-[margin,padding,background-color,border-color,backdrop-filter]",
               "duration-[--duration-base] ease-[--ease-quiet]",
+              "motion-reduce:transition-none",
+              tight
+                ? "mt-2 py-1 pl-4 md:mt-2 md:pl-5"
+                : "mt-3 py-2 pl-4 md:mt-4 md:pl-6",
               lifted || open
                 ? "border-rule bg-[color-mix(in_oklab,var(--color-chalk)_80%,transparent)] backdrop-blur-xl"
                 : "border-transparent bg-transparent",
@@ -174,8 +240,10 @@ export function Header() {
                         onMouseEnter={(e) => moveIndicator(e.currentTarget.parentElement)}
                         onFocus={(e) => moveIndicator(e.currentTarget.parentElement)}
                         className={cn(
-                          "text-body-sm block rounded-sm px-3.5 py-2 transition-colors",
-                          "duration-[--duration-fast] ease-[--ease-quiet]",
+                          "text-body-sm block rounded-sm px-3.5 transition-all",
+                          "duration-[--duration-base] ease-[--ease-quiet]",
+                          "motion-reduce:transition-none",
+                          tight ? "py-1.5" : "py-2",
                           current ? "text-fg" : "text-fg-muted hover:text-fg",
                         )}
                       >
@@ -203,7 +271,14 @@ export function Header() {
             </nav>
 
             <div className="flex shrink-0 items-center gap-2">
-              <ButtonLink href={cta.primary.href} className="px-4 sm:px-5">
+              <ButtonLink
+                href={cta.primary.href}
+                className={cn(
+                  "px-4 transition-all duration-[--duration-base] sm:px-5",
+                  "motion-reduce:transition-none",
+                  tight && "py-2.5",
+                )}
+              >
                 {cta.primary.label}
               </ButtonLink>
 
@@ -215,9 +290,10 @@ export function Header() {
                 aria-controls={menuId}
                 onClick={() => setOpen((v) => !v)}
                 className={cn(
-                  "rounded-capsule border-rule-strong text-body-sm border px-4 py-3",
-                  "text-fg transition-colors duration-[--duration-fast] lg:hidden",
-                  "hover:border-fg",
+                  "rounded-capsule border-rule-strong text-body-sm border px-4",
+                  "text-fg transition-all duration-[--duration-base] lg:hidden",
+                  "motion-reduce:transition-none hover:border-fg",
+                  tight ? "py-2.5" : "py-3",
                 )}
               >
                 {open ? "Close" : "Menu"}

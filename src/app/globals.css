@@ -217,9 +217,19 @@
 
   html {
     -webkit-text-size-adjust: 100%;
-    scroll-behavior: smooth;
     /* Offset in-page anchors so the floating nav never covers a heading. */
     scroll-padding-top: 7rem;
+
+    /* Deliberately NOT `scroll-behavior: smooth`.
+       It animates every *programmatic* scroll, which is exactly what
+       ScrollTrigger performs when it engages a pin, corrects a position, or
+       restores scroll on refresh — so the browser and the pin end up animating
+       against each other and the pinned sections drift. Measured: a single
+       `scrollBy(200)` covered 564px in three seconds of chasing with `smooth`
+       against 12053px with `auto`.
+       Nothing on this site links to an in-page anchor except the skip link,
+       and a skip link should arrive instantly rather than fly — an animated
+       one is disorienting for exactly the people who use it. */
   }
 
   body {
@@ -412,5 +422,289 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   The zoom-through portal
+   --------------------------------------------------------------------------
+   Used by `src/components/sections/FeatureZoom.tsx`.
+
+   Two fields stacked inside one pinned viewport: a sheet of paper with an
+   aperture punched out of it, and the ink room behind. Scrolling scales the
+   sheet through the viewer, so the aperture becomes the room you are standing
+   in. The hole is a static mask under an animated transform — the mask is
+   baked into the layer's raster, so the scale still composites on the GPU.
+
+   Written as plain CSS rather than utilities because it is gated three ways
+   and the gating is the point:
+
+   - `html.js`, so a visitor with no JavaScript gets two ordinary blocks in
+     document order rather than one layer hiding the other forever;
+   - `min-width: 768px`, because pinning a phone for two viewports is a trap;
+   - `prefers-reduced-motion: no-preference`.
+
+   Outside those three conditions every rule in the block below is absent: the
+   layers are static, the punched sheet is not rendered at all, and the section
+   reads top to bottom like any other.
+   ========================================================================== */
+
+/* Geometry that only means anything mid-zoom. Off by default, on inside the
+   gate — so it can never strand a fallback reader behind an opaque sheet. */
+.portal-plane,
+.portal-rim {
+  display: none;
+}
+
+/* The work frame's edge: one hairline that shifts from electric sky to brand
+   blue across the frame, over a blurred ground. The "glass" is the blur, not a
+   stack of overlays, and the gradient lives on a single 1px edge — not on a
+   field. Ungated: it is a static treatment the fallback needs too. */
+.portal-glass {
+  padding: 1px;
+  background-image: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-sky) 52%, transparent),
+    color-mix(in oklab, var(--color-blue) 44%, transparent) 42%,
+    color-mix(in oklab, var(--color-mist) 12%, transparent)
+  );
+}
+
+.portal-glass > * {
+  background-color: color-mix(in oklab, var(--color-ink-raised) 78%, transparent);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Ambient light in the room: two soft pools rather than a gradient wash, so
+   the ink field stays a field and the plate stays the brightest thing in it. */
+.portal-ambient {
+  background-image:
+    radial-gradient(
+      58% 46% at 22% 18%,
+      color-mix(in oklab, var(--color-blue) 22%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      44% 40% at 84% 82%,
+      color-mix(in oklab, var(--color-sky) 13%, transparent),
+      transparent 72%
+    );
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  html.js .portal-stage {
+    height: 100svh;
+    padding-block: 0;
+    overflow: hidden;
+    contain: paint;
+  }
+
+  html.js .portal-layer {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  /* The light field sits over the room, so the room is only ever seen through
+     the aperture until the crossfade dissolves the sheet entirely.
+
+     Its own background has to go: once the zoom is live the *sheet* is the only
+     paper in play, and a layer that keeps a ground of its own means the
+     aperture punches through to more paper instead of to the room. Outside this
+     gate the sheet is not rendered at all, so the layer's background is exactly
+     what the fallback needs — which is why this is here and not in the markup. */
+  html.js .portal-layer-light {
+    z-index: 2;
+    background-color: transparent;
+    /* Its fallback bottom padding is what keeps the footnote off the room; once
+       the layers are stacked the footnote is positioned, so the padding would
+       only pull the centred headline — and the aperture with it — off centre. */
+    padding-bottom: 0;
+  }
+
+  html.js .portal-layer-room {
+    z-index: 1;
+  }
+
+  html.js .portal-plane,
+  html.js .portal-rim {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* The aperture's measured centre, written by GSAP on every refresh, so the
+       hole, the rim light and the scale origin agree at any viewport — no
+       reliance on the headline above it breaking onto a predictable number of
+       lines. `50%` is the honest fallback for the first frame. */
+    --aperture-x: 50%;
+    --aperture-y: 50%;
+    --aperture-r: 4.5vmin;
+    transform-origin: var(--aperture-x) var(--aperture-y);
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  html.js .portal-plane {
+    background-color: var(--color-paper);
+    -webkit-mask-image: radial-gradient(
+      circle at var(--aperture-x) var(--aperture-y),
+      transparent 0 var(--aperture-r),
+      #000 calc(var(--aperture-r) + 1.5px)
+    );
+    mask-image: radial-gradient(
+      circle at var(--aperture-x) var(--aperture-y),
+      transparent 0 var(--aperture-r),
+      #000 calc(var(--aperture-r) + 1.5px)
+    );
+  }
+
+  /* Edge light on the aperture, sitting just inside the hole so it reads
+     through it. It keeps expanding after the sheet has gone, which is what
+     makes the last stretch of the scale felt rather than merely computed. */
+  html.js .portal-rim {
+    opacity: 0;
+    background-image: radial-gradient(
+      circle at var(--aperture-x) var(--aperture-y),
+      transparent 0 calc(var(--aperture-r) - 2.5px),
+      color-mix(in oklab, var(--color-sky) 78%, transparent) calc(var(--aperture-r) - 0.5px),
+      transparent calc(var(--aperture-r) + 1.5px)
+    );
+  }
+
+  /* Anything the timeline brings up. Inert in the markup, revealed by GSAP —
+     and, outside this gate, never dimmed in the first place. */
+  html.js .portal-fade {
+    opacity: 0;
+  }
+
+  /* The intro footnote leaves the centred stack so the aperture mark sits on
+     the true middle of the sheet rather than being pushed up by a caption. */
+  html.js .portal-footnote {
+    position: absolute;
+    right: 0;
+    bottom: clamp(2rem, 7vh, 5rem);
+    left: 0;
+  }
+}
+
+/* ==========================================================================
+   The "For" reel
+   --------------------------------------------------------------------------
+   Used by `src/components/sections/ForAudienceReel.tsx`.
+
+   A single word holds still on the left while the audiences it belongs to run
+   past a focal line on the right. The focus state is expressed as a data
+   attribute rather than a tween, so CSS owns the transition and GSAP only ever
+   reports which item is on the line — one attribute write per crossing
+   instead of a property tween per item per frame.
+
+   Gated exactly as the portal is. Under the fallback nothing is dimmed, no
+   mask is applied, and the reel is a list of links.
+   ========================================================================== */
+
+.reel-item {
+  transform-origin: left center;
+  /* Fast on purpose. This transition is spent *on top of* the scrub's own
+     catch-up, so a leisurely one reads as the highlight trailing the line. */
+  transition:
+    color var(--duration-fast) var(--ease-quiet),
+    opacity var(--duration-fast) var(--ease-quiet),
+    transform var(--duration-fast) var(--ease-signal);
+}
+
+.reel-lead,
+.reel-node {
+  transition:
+    opacity var(--duration-fast) var(--ease-quiet),
+    transform var(--duration-fast) var(--ease-signal);
+}
+
+.reel-node {
+  transform-origin: left center;
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  html.js .reel-stage {
+    height: 100svh;
+    padding-block: 0;
+    overflow: hidden;
+    contain: paint;
+  }
+
+  /* The focal window. The mask is the whole reason the list can overflow a
+     viewport without a hard edge: items arrive and leave as light, not as
+     cropped type. */
+  html.js .reel-viewport {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 25%,
+      #000 75%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 25%,
+      #000 75%,
+      transparent 100%
+    );
+  }
+
+  html.js .reel-track {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    will-change: transform;
+  }
+
+  html.js .reel-item {
+    color: var(--color-mist);
+    opacity: 0.22;
+  }
+
+  html.js .reel-item[data-focus="true"] {
+    color: var(--color-coral);
+    opacity: 1;
+    transform: scale(1.04);
+  }
+
+  /* A dimmed item is still a link. Whoever is reaching for one needs to be able
+     to see which, so pointing at it or tabbing to it lifts it out of the dim —
+     in paper rather than coral, because coral means "on the line", not "under
+     the cursor". */
+  html.js .reel-item:focus-visible {
+    color: var(--color-paper);
+    opacity: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    html.js .reel-item:hover {
+      color: var(--color-paper);
+      opacity: 1;
+    }
+  }
+
+  html.js .reel-lead {
+    opacity: 0;
+  }
+
+  html.js .reel-item[data-focus="true"] .reel-lead {
+    opacity: 1;
+  }
+
+  html.js .reel-node {
+    transform: scaleX(0);
+  }
+
+  html.js .reel-item[data-focus="true"] .reel-node {
+    transform: scaleX(1);
   }
 }

@@ -16,41 +16,93 @@ for (const viewport of VIEWPORTS) {
       reducedMotion: "no-preference",
     });
 
-    test("feature zoom, start and end of the scrub", async ({ page }) => {
+    /**
+     * Walks a pinned section and captures it at each fraction of its own pin.
+     * The pin's real length is measured rather than guessed, so "end" is the
+     * end of the scrub and not a point after the section has scrolled away.
+     */
+    const walk = async (
+      page: import("@playwright/test").Page,
+      id: string,
+      name: string,
+      marks: readonly (readonly [string, number])[],
+    ) => {
       await page.goto("/", { waitUntil: "load" });
       await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(400);
 
-      const top = await page.$eval(
-        "#feature",
-        (el) => el.getBoundingClientRect().top + window.scrollY,
-      );
-
-      // The pin's real length, so "end" is the end of the scrub rather than
-      // a guess that lands after the section has already scrolled away.
-      const distance = await page.$eval("#feature", (el) => {
+      // Unpinned (phone, reduced motion) there is no pin-spacer at all, and
+      // measuring against `<main>` would walk the top of the page instead of
+      // the section. Fall back to the section's own box and height.
+      const { top, distance } = await page.$eval(id, (el) => {
         const spacer = el.parentElement;
-        if (!spacer) return 400;
-        return Math.max(
-          200,
-          spacer.getBoundingClientRect().height - el.getBoundingClientRect().height,
-        );
+        const pinned = spacer?.classList.contains("pin-spacer") ?? false;
+        const box = el.getBoundingClientRect();
+        const frame = pinned ? spacer!.getBoundingClientRect() : box;
+        return {
+          top: frame.top + window.scrollY,
+          distance: pinned ? Math.max(200, frame.height - box.height) : box.height,
+        };
       });
 
-      for (const [label, fraction] of [
-        ["start", 0],
-        ["end", 0.98],
-      ] as const) {
+      for (const [label, fraction] of marks) {
         await page.evaluate(
           (y) => window.scrollTo({ top: y, behavior: "instant" }),
           top + distance * fraction,
         );
-        await page.waitForTimeout(600);
-        await page.screenshot({ path: shot(`${viewport.name}-feature-${label}`) });
+        // Long enough for a 0.8–1.0 scrub to finish catching up.
+        await page.waitForTimeout(1000);
+        await page.screenshot({ path: shot(`${viewport.name}-${name}-${label}`) });
       }
+    };
+
+    // The three beats of the portal plus the hold: the intro sheet, the sheet
+    // mid-flight, the crossfade itself, and the room standing still.
+    test("portal, through the aperture", async ({ page }) => {
+      await walk(page, "#feature", "portal", [
+        ["1-intro", 0],
+        ["2-push", 0.3],
+        ["3-crossfade", 0.55],
+        ["4-room", 0.95],
+      ]);
+    });
+
+    test("for reel, three points on the focal line", async ({ page }) => {
+      await walk(page, "#for", "reel", [
+        ["1-first", 0],
+        ["2-middle", 0.5],
+        ["3-last", 0.98],
+      ]);
     });
   });
 }
+
+test.describe("navigation bar", () => {
+  test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
+
+  test("at rest, and tightened on the way down", async ({ page }) => {
+    await page.goto("/", { waitUntil: "load" });
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(400);
+
+    const strip = { x: 0, y: 0, width: 1440, height: 120 };
+    await page.screenshot({ path: shot("nav-1-rest"), clip: strip });
+
+    for (let i = 0; i < 8; i += 1) {
+      await page.mouse.wheel(0, 120);
+      await page.waitForTimeout(40);
+    }
+    await page.waitForTimeout(600);
+    await page.screenshot({ path: shot("nav-2-tight"), clip: strip });
+
+    for (let i = 0; i < 4; i += 1) {
+      await page.mouse.wheel(0, -120);
+      await page.waitForTimeout(40);
+    }
+    await page.waitForTimeout(600);
+    await page.screenshot({ path: shot("nav-3-returned"), clip: strip });
+  });
+});
 
 test.describe("hero settle", () => {
   test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
