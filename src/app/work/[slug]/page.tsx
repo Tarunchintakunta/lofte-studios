@@ -50,7 +50,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
         title={isReserved ? study.reservedTitle : study.title}
         standfirst={isReserved ? study.reservedSummary : study.challenge}
         aside={
-          <dl className="flex flex-col gap-4">
+          <dl className="flex flex-wrap justify-center gap-x-10 gap-y-4">
             {study.client ? (
               <div>
                 <dt className="text-micro text-fg-subtle">Client</dt>
@@ -105,8 +105,8 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
 
       <Section surface="paper" size="tight">
         <Container>
-          <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
-            <div className="lg:col-span-7">
+          <div>
+            <div className="mx-auto max-w-3xl">
               {isReserved ? (
                 <>
                   <h2 className="text-display-3 font-display">What goes here</h2>

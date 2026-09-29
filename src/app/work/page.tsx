@@ -42,13 +42,10 @@ export default async function WorkPage(props: PageProps<"/work">) {
         standfirst="Each piece is published only once the client has approved the work, the credit, and any result shown alongside it."
       />
 
-      <Section surface="paper" size="none" className="pb-(--spacing-section)">
+      <Section surface="chalk" size="none" className="pb-(--spacing-section)">
         <Container>
-          <nav
-            aria-label="Filter work by capability"
-            className="border-rule border-t pt-6"
-          >
-            <ul className="flex flex-wrap gap-2">
+          <nav aria-label="Filter work by capability" className="flex justify-center">
+            <ul className="flex flex-wrap justify-center gap-2">
               <li>
                 <Link
                   href="/work"
@@ -87,7 +84,7 @@ export default async function WorkPage(props: PageProps<"/work">) {
             </ul>
           </nav>
 
-          <p aria-live="polite" className="text-body-sm text-fg-subtle mt-6">
+          <p aria-live="polite" className="text-body-sm text-fg-subtle mt-6 text-center">
             {filtered.length} {filtered.length === 1 ? "piece" : "pieces"}
             {active ? ` in ${capabilities.find((c) => c.slug === active)?.name}` : ""}
           </p>

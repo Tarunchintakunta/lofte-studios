@@ -29,15 +29,15 @@ export default function PrivacyPage() {
         standfirst="What this website currently does with information, written plainly so it can be checked against a real policy."
       />
 
-      <Section surface="paper" size="none" className="pb-(--spacing-section)">
+      <Section surface="chalk" size="none" className="pb-(--spacing-section)">
         <Container>
-          <PlaceholderNote className="mb-12">
+          <PlaceholderNote className="mx-auto mb-12">
             This is not a privacy policy and has had no legal review. It is a factual
             description of the site as built, provided so that {site.legalName} and its
             advisers can write the real thing. Replace this page before launch.
           </PlaceholderNote>
 
-          <div className="measure-wide border-rule border-t pt-10">
+          <div className="measure-wide border-rule mx-auto border-t pt-10">
             <h2 className="text-display-3 font-display">What the site collects</h2>
             <p className="text-body text-fg-muted mt-5">
               The only information this website collects is what someone chooses to type

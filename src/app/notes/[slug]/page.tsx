@@ -66,16 +66,16 @@ export default async function NotePage(props: PageProps<"/notes/[slug]">) {
         }
       />
 
-      <Section surface="paper" size="none" className="pb-(--spacing-section)">
+      <Section surface="chalk" size="none" className="pb-(--spacing-section)">
         <Container>
           {insight.status === "sample" ? (
-            <PlaceholderNote className="mb-12">
+            <PlaceholderNote className="mx-auto mb-12">
               A sample note, not a published Løfte position. It has no byline or date and
               is excluded from search indexing and the sitemap.
             </PlaceholderNote>
           ) : null}
 
-          <article className="measure-wide border-rule border-t pt-10">
+          <article className="measure-wide border-rule mx-auto border-t pt-10">
             {insight.body.map((block, index) => {
               const key = `${block.type}-${index}`;
               if (block.type === "h2") {
