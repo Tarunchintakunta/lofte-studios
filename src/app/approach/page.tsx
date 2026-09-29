@@ -2,6 +2,7 @@ import { Container, Section, SectionHead } from "@/components/layout/Section";
 import { PageHero } from "@/components/layout/PageHero";
 import { ClosingCta } from "@/components/sections/ClosingCta";
 import { TextLink } from "@/components/ui/TextLink";
+import { Reveal } from "@/components/ui/Reveal";
 import { pageMetadata } from "@/lib/metadata";
 import { methodSteps } from "@/content/method";
 import { capabilities } from "@/content/capabilities";
@@ -21,27 +22,25 @@ export default function ApproachPage() {
         standfirst="Not a methodology to be sold. Just the order the decisions have to be made in, written down so a client can see where a project is and what happens next."
       />
 
-      <Section surface="paper" size="none" className="pb-(--spacing-section)">
+      <Section surface="chalk" size="none" className="pb-(--spacing-section)">
         <Container>
-          <ol className="border-rule border-t">
-            {methodSteps.map((step) => (
-              <li
+          <ol className="grid gap-4 md:grid-cols-2">
+            {methodSteps.map((step, index) => (
+              <Reveal
+                as="li"
                 key={step.name}
-                className="border-rule grid gap-x-10 gap-y-4 border-b py-10 md:grid-cols-12 md:py-14"
+                delay={(index % 2) * 100}
+                className="bg-paper flex min-h-[20rem] flex-col rounded-[2rem] p-8 md:p-10"
               >
-                <div className="flex items-baseline gap-4 md:col-span-4 md:flex-col md:gap-3">
-                  <span className="text-body-sm text-accent font-sans tabular-nums">
-                    {String(step.index).padStart(2, "0")}
-                  </span>
-                  <h2 className="text-display-3 font-display">{step.name}</h2>
-                </div>
-                <div className="md:col-span-7 md:col-start-6">
-                  <p className="text-body-lg text-balance">{step.summary}</p>
-                  <p className="measure-wide text-body text-fg-muted mt-4">
-                    {step.detail}
-                  </p>
-                </div>
-              </li>
+                <span className="text-display-2 font-display text-accent font-semibold tabular-nums">
+                  {String(step.index).padStart(2, "0")}
+                </span>
+                <h2 className="text-display-3 font-display mt-6 font-semibold tracking-[-0.03em]">
+                  {step.name}
+                </h2>
+                <p className="text-body-lg mt-4 text-balance">{step.summary}</p>
+                <p className="text-body text-fg-muted mt-3">{step.detail}</p>
+              </Reveal>
             ))}
           </ol>
         </Container>
