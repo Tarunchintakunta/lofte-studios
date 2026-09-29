@@ -7,6 +7,7 @@ import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
 import { TextLink } from "@/components/ui/TextLink";
 import { WorkCard } from "@/components/work/WorkCard";
 import { BreadcrumbSchema, ServiceSchema } from "@/components/seo/StructuredData";
+import { Reveal } from "@/components/ui/Reveal";
 import { pageMetadata } from "@/lib/metadata";
 import { getCaseStudies, getService, getServices } from "@/lib/content";
 import { capabilityBySlug } from "@/content/capabilities";
@@ -56,29 +57,32 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
         standfirst={service.summary}
       />
 
-      <Section surface="chalk" labelledBy="solves-heading">
+      <Section
+        surface="chalk"
+        size="none"
+        className="pb-(--spacing-section)"
+        labelledBy="solves-heading"
+      >
         <Container>
-          <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
-            <div className="lg:col-span-5">
-              <h2 id="solves-heading" className="text-display-3 font-display">
-                What it solves
-              </h2>
-              <p className="measure text-body text-fg-muted mt-6">
-                These are the sentences clients tend to open with. If one of them sounds
-                like your team, this is the group to talk to us about.
-              </p>
-            </div>
-
-            <ul className="lg:col-span-6 lg:col-start-7">
-              {service.solves.map((problem) => (
-                <li key={problem} className="border-rule border-t py-6 last:border-b">
-                  <p className="text-heading-2 font-display text-balance">
-                    &ldquo;{problem}&rdquo;
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <SectionHead
+            id="solves-heading"
+            heading="What it solves."
+            standfirst="The sentences clients tend to open with. If one of them sounds like your team, this is the group to talk to us about."
+          />
+          <ul className="mt-14 grid gap-4 md:grid-cols-2">
+            {service.solves.map((problem, index) => (
+              <Reveal
+                as="li"
+                key={problem}
+                delay={(index % 2) * 100}
+                className="bg-paper rounded-[2rem] p-8 md:p-10"
+              >
+                <p className="text-heading-1 font-display font-semibold text-balance">
+                  &ldquo;{problem}&rdquo;
+                </p>
+              </Reveal>
+            ))}
+          </ul>
         </Container>
       </Section>
 
@@ -95,55 +99,67 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
             }
           />
 
-          <div className="mt-14 grid gap-x-10 gap-y-10 md:mt-18 md:grid-cols-2">
-            {service.process.map((step) => (
-              <div key={step.title} className="border-rule border-t pt-6">
-                <h3 className="text-heading-1 font-display text-balance">{step.title}</h3>
-                <p className="text-body text-fg-muted mt-4">{step.detail}</p>
-              </div>
+          <ol className="mt-14 grid gap-4 md:mt-18 md:grid-cols-2">
+            {service.process.map((step, index) => (
+              <Reveal
+                as="li"
+                key={step.title}
+                delay={(index % 2) * 100}
+                className="bg-chalk rounded-[2rem] p-8 md:p-10"
+              >
+                <span className="text-body text-accent font-semibold tabular-nums">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="text-heading-1 font-display mt-4 font-semibold text-balance">
+                  {step.title}
+                </h3>
+                <p className="text-body text-fg-muted mt-3">{step.detail}</p>
+              </Reveal>
             ))}
-          </div>
+          </ol>
 
-          <div className="border-rule mt-16 grid gap-x-12 gap-y-8 border-t pt-8 lg:grid-cols-12">
-            <h2 className="text-heading-1 font-display lg:col-span-4">
-              What you receive
-            </h2>
-            <ul className="lg:col-span-7 lg:col-start-6">
-              {service.deliverables.map((deliverable) => (
-                <li
-                  key={deliverable}
-                  className="border-rule text-body flex items-baseline gap-4 border-b py-3.5 last:border-b-0"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="bg-accent h-[3px] w-[3px] shrink-0 rounded-full"
-                  />
-                  {deliverable}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="border-rule mt-16 grid gap-x-12 gap-y-8 border-t pt-8 lg:grid-cols-12">
-            <h2 className="text-heading-1 font-display lg:col-span-4">
-              Capabilities behind it
-            </h2>
-            <ul className="flex flex-wrap gap-2 lg:col-span-7 lg:col-start-6">
-              {service.capabilities.map((slug) => {
-                const capability = capabilityBySlug(slug);
-                if (!capability) return null;
-                return (
-                  <li key={slug}>
-                    <Link
-                      href={`/work?capability=${slug}`}
-                      className="border-rule-strong rounded-capsule text-body-sm hover:border-fg block border px-4 py-2 transition-colors duration-[--duration-fast]"
-                    >
-                      {capability.name}
-                    </Link>
+          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+            <Reveal className="bg-chalk rounded-[2rem] p-8 md:p-10">
+              <h2 className="text-heading-1 font-display font-semibold">
+                What you receive
+              </h2>
+              <ul className="mt-5">
+                {service.deliverables.map((deliverable) => (
+                  <li
+                    key={deliverable}
+                    className="border-rule text-body flex items-baseline gap-4 border-b py-3.5 last:border-b-0"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="bg-accent h-[3px] w-[3px] shrink-0 rounded-full"
+                    />
+                    {deliverable}
                   </li>
-                );
-              })}
-            </ul>
+                ))}
+              </ul>
+            </Reveal>
+
+            <Reveal delay={100} className="bg-chalk rounded-[2rem] p-8 md:p-10">
+              <h2 className="text-heading-1 font-display font-semibold">
+                Capabilities behind it
+              </h2>
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {service.capabilities.map((slug) => {
+                  const capability = capabilityBySlug(slug);
+                  if (!capability) return null;
+                  return (
+                    <li key={slug}>
+                      <Link
+                        href={`/work?capability=${slug}`}
+                        className="border-rule-strong rounded-capsule text-body-sm hover:border-fg block border px-4 py-2 transition-colors duration-[--duration-fast]"
+                      >
+                        {capability.name}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </Reveal>
           </div>
         </Container>
       </Section>
@@ -171,8 +187,8 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
           </div>
           {!hasPublishedWork ? (
             <PlaceholderNote className="mt-8">
-              Reserved slots. Real case studies appear here automatically once they are
-              published with client approval.
+              Samples and reserved slots, not client work. Real case studies appear here
+              automatically once they are published with client approval.
             </PlaceholderNote>
           ) : null}
         </Container>
@@ -182,7 +198,7 @@ export default async function ServicePage(props: PageProps<"/services/[slug]">) 
         <Section surface="chalk" labelledBy="faq-heading">
           <Container>
             <SectionHead id="faq-heading" heading="Questions we get asked." />
-            <div className="mt-10 lg:max-w-[52rem]">
+            <div className="mx-auto mt-10 max-w-3xl">
               {service.faq.map((entry) => (
                 <details
                   key={entry.question}
