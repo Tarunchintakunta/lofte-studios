@@ -18,7 +18,9 @@ import { getCaseStudies } from "@/lib/content";
 export async function SelectedWork() {
   const caseStudies = await getCaseStudies();
   const published = caseStudies.filter((study) => study.status === "published");
-  const slots = published.length > 0 ? published : caseStudies;
+  const samples = caseStudies.filter((study) => study.status === "sample");
+  const slots =
+    published.length > 0 ? published : samples.length > 0 ? samples : caseStudies;
   const isReserved = published.length === 0;
 
   return (
@@ -51,9 +53,9 @@ export async function SelectedWork() {
 
         {isReserved ? (
           <PlaceholderNote className="mt-10">
-            Three slots are reserved above. The plates are abstract by design — no
-            invented client, sector, or result appears anywhere on this site. Supply three
-            to six approved case studies and these fill in without a layout change.
+            The pieces above are samples with fictional clients, shown to demonstrate the
+            layout. Supply three to six approved case studies and they replace these
+            without a layout change.
           </PlaceholderNote>
         ) : null}
       </Container>

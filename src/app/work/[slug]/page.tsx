@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Container, Section } from "@/components/layout/Section";
 import { PageHero } from "@/components/layout/PageHero";
@@ -27,7 +28,7 @@ export async function generateMetadata(props: PageProps<"/work/[slug]">) {
     type: "article",
     // A reserved slot is a real URL with no real content behind it. It should
     // not be indexed until a case study is actually published into it.
-    noIndex: isReserved,
+    noIndex: study.status !== "published",
   });
 }
 
@@ -69,13 +70,32 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
         }
       >
         <div className="border-rule mt-14 aspect-[16/8] w-full overflow-hidden border md:mt-18">
-          <WorkPlate seed={study.slug.length + 3} ratio="wide" />
+          {study.cover ? (
+            <Image
+              src={study.cover}
+              alt=""
+              width={1600}
+              height={800}
+              sizes="100vw"
+              priority
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <WorkPlate seed={study.slug.length + 3} ratio="wide" />
+          )}
         </div>
         {isReserved ? (
           <PlaceholderNote className="mt-6">
             This is a reserved slot, not a project. The plate above is abstract by design,
             and the page is excluded from search indexing until a real case study is
             published into it.
+          </PlaceholderNote>
+        ) : null}
+        {study.status === "sample" ? (
+          <PlaceholderNote className="mt-6">
+            Sample case study. The client and project are fictional, written to show how a
+            real piece will read. No results are shown, and the page is excluded from
+            search indexing.
           </PlaceholderNote>
         ) : null}
       </PageHero>

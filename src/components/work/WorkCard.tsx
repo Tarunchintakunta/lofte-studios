@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { WorkPlate } from "@/components/signal/WorkPlate";
 import { cn } from "@/lib/cn";
@@ -29,6 +30,7 @@ export function WorkCard({
 }) {
   const Heading = headingLevel === 2 ? "h2" : "h3";
   const isReserved = study.status === "reserved";
+  const isSample = study.status === "sample";
   const wide = size === "wide";
 
   const capabilityNames = study.capabilities
@@ -46,11 +48,22 @@ export function WorkCard({
             wide ? "aspect-[16/7]" : "aspect-[16/10]",
           )}
         >
-          <WorkPlate
-            seed={seed}
-            ratio={wide ? "wide" : "standard"}
-            className="media-zoom"
-          />
+          {study.cover ? (
+            <Image
+              src={study.cover}
+              alt=""
+              width={1600}
+              height={wide ? 700 : 1000}
+              sizes={wide ? "100vw" : "(min-width: 768px) 50vw, 100vw"}
+              className="media-zoom h-full w-full object-cover"
+            />
+          ) : (
+            <WorkPlate
+              seed={seed}
+              ratio={wide ? "wide" : "standard"}
+              className="media-zoom"
+            />
+          )}
         </div>
         <Heading
           className={cn(
@@ -67,7 +80,12 @@ export function WorkCard({
         {isReserved ? study.reservedSummary : study.challenge}
       </p>
       {capabilityNames ? (
-        <p className="text-micro text-fg-subtle mt-3">{capabilityNames}</p>
+        <p className="text-micro text-fg-subtle mt-3">
+          {isSample ? (
+            <span className="text-coral-deep font-semibold">Sample · </span>
+          ) : null}
+          {capabilityNames}
+        </p>
       ) : null}
     </article>
   );
