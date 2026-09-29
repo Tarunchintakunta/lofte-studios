@@ -110,6 +110,3 @@ export const placeholders: PlaceholderItem[] = [
     where: "Metadata, sitemap.xml, robots.txt, OG image URLs",
   },
 ];
-
-export const placeholdersByCategory = (category: PlaceholderCategory) =>
-  placeholders.filter((p) => p.category === category);
