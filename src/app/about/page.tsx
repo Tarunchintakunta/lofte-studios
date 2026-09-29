@@ -3,6 +3,8 @@ import { PageHero } from "@/components/layout/PageHero";
 import { ClosingCta } from "@/components/sections/ClosingCta";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
 import { TextLink } from "@/components/ui/TextLink";
+import { Reveal } from "@/components/ui/Reveal";
+import { cn } from "@/lib/cn";
 import { pageMetadata } from "@/lib/metadata";
 import { principles } from "@/content/about";
 import { getTeam } from "@/lib/content";
@@ -25,40 +27,48 @@ export default async function AboutPage() {
         standfirst={`Løfte Studios is a creative-production and digital-storytelling partner in ${site.city}. We put strategy and production in the same room because the gap between them is where most content quietly loses its point.`}
       />
 
-      <Section surface="chalk" labelledBy="story-heading">
+      <Section surface="paper" labelledBy="story-heading">
         <Container>
-          <div className="grid gap-x-12 gap-y-10 lg:grid-cols-12">
-            <h2 id="story-heading" className="text-display-3 font-display lg:col-span-4">
-              How we work
+          <Reveal className="mx-auto max-w-3xl text-center">
+            <h2
+              id="story-heading"
+              className="text-display-2 font-display font-semibold tracking-[-0.035em] text-balance"
+            >
+              Organised around a question.
             </h2>
-            <div className="lg:col-span-7 lg:col-start-6">
-              <p className="text-body-lg text-balance">
-                Most studios are organised around a craft. We are organised around a
-                question: what does this need to make someone understand?
-              </p>
-              <p className="text-body text-fg-muted mt-6">
-                That question decides the format rather than the other way round.
+            <p className="text-display-3 font-display text-fg-muted mt-8 font-semibold tracking-[-0.03em] text-balance">
+              Most studios are organised around a craft. We are organised around a
+              question: what does this need to make someone understand?
+            </p>
+          </Reveal>
+
+          <div className="mt-14 grid gap-4 md:mt-20 lg:grid-cols-2">
+            <Reveal className="bg-chalk rounded-[2rem] p-8 md:p-12">
+              <h3 className="text-heading-1 font-display font-semibold">
+                The format follows the point.
+              </h3>
+              <p className="text-body-lg text-fg-muted mt-4">
                 Sometimes the honest answer is a two-minute film. Often it is a rewritten
                 page, a clearer chart, or a script that stops apologising for its own
                 argument. We would rather tell a client they do not need the expensive
                 thing than sell it to them.
               </p>
-              <p className="text-body text-fg-muted mt-5">
-                Practically, that means one team holding a project from the first
-                conversation to the final handover — writing, design, motion, sound, and
-                localization included. No brief gets renegotiated at a handoff, because
-                there are no handoffs.
+            </Reveal>
+            <Reveal delay={100} className="bg-chalk rounded-[2rem] p-8 md:p-12">
+              <h3 className="text-heading-1 font-display font-semibold">
+                One team, first call to handover.
+              </h3>
+              <p className="text-body-lg text-fg-muted mt-4">
+                Writing, design, motion, sound, and localization held by the same people.
+                No brief gets renegotiated at a handoff, because there are no handoffs.
+                Read the six steps in <TextLink href="/approach">our approach</TextLink>.
               </p>
-              <p className="text-body text-fg-muted mt-5">
-                Read the six steps that shape every project in{" "}
-                <TextLink href="/approach">our approach</TextLink>.
-              </p>
-            </div>
+            </Reveal>
           </div>
         </Container>
       </Section>
 
-      <Section surface="paper" labelledBy="principles-heading">
+      <Section surface="chalk" labelledBy="principles-heading">
         <Container>
           <SectionHead
             id="principles-heading"
@@ -66,21 +76,22 @@ export default async function AboutPage() {
             standfirst="Five commitments that are easy to check, because each one is something a client can point at and say we did or did not do it."
           />
 
-          <dl className="mt-14 md:mt-20">
-            {principles.map((principle) => (
-              <div
+          <dl className="mt-14 grid gap-4 md:mt-20 md:grid-cols-2">
+            {principles.map((principle, index) => (
+              <Reveal
                 key={principle.title}
-                className="border-rule grid gap-x-10 gap-y-3 border-t py-8 last:border-b md:grid-cols-12 md:py-10"
+                delay={(index % 2) * 100}
+                className={cn(
+                  "bg-paper rounded-[2rem] p-8 md:p-10",
+                  // An odd count closes on one full-width tile.
+                  index === principles.length - 1 && index % 2 === 0 && "md:col-span-2",
+                )}
               >
-                <dt className="md:col-span-5">
-                  <span className="font-display text-heading-1 block text-balance">
-                    {principle.title}
-                  </span>
+                <dt className="text-heading-1 font-display font-semibold text-balance">
+                  {principle.title}
                 </dt>
-                <dd className="text-body text-fg-muted md:col-span-6 md:col-start-7">
-                  {principle.detail}
-                </dd>
-              </div>
+                <dd className="text-body-lg text-fg-muted mt-4">{principle.detail}</dd>
+              </Reveal>
             ))}
           </dl>
         </Container>
@@ -90,7 +101,7 @@ export default async function AboutPage() {
         <Section surface="paper" size="tight" labelledBy="team-heading">
           <Container>
             <SectionHead id="team-heading" heading="The people." />
-            <ul className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {team.map((member) => (
                 <li key={member.id}>
                   <h3 className="text-heading-1 font-display">{member.name}</h3>
