@@ -87,18 +87,21 @@ the only one permitted on that field.
 
 ### Motion
 
-GSAP (through `@gsap/react`'s `useGSAP`) runs in exactly three places, each a
-deliberate moment rather than an effect:
+The homepage is paced like a product page: one statement per screen, centred
+headlines, rounded tiles, and content that rises in once as it arrives.
 
-| Moment     | Behaviour                                                                                        |
-| ---------- | ------------------------------------------------------------------------------------------------ |
-| Feature    | A pinned frame scrubs `0.86 → 1.03` — from 768px up, `pinType: "transform"`, one viewport of pin |
-| Method     | The step rail advances as the six steps scroll past a sticky panel                               |
-| Work cards | `scale(1.04)` inside a clipped frame, hover-capable pointers only, with a matching focus state   |
+| Moment     | Behaviour                                                                                       |
+| ---------- | ----------------------------------------------------------------------------------------------- |
+| Reveal     | `Reveal` flips one attribute on first intersection; CSS rises the block `2.5rem` into place     |
+| Statement  | One sentence lights up word by word as it scrolls through the middle of the screen (GSAP scrub) |
+| For        | A native horizontal scroll-snap gallery with arrow buttons — no pin, no wheel hijacking         |
+| Feature    | The portal pins and scales through the aperture — from 768px up, `pinType: "transform"`         |
+| Method     | The step rail advances as the six steps scroll past a sticky panel                              |
+| Work cards | `scale(1.04)` inside a clipped frame, hover-capable pointers only, with a matching focus state  |
 
-There is no universal fade-up and no decorative parallax. Every one of the three
-is off under `prefers-reduced-motion`, and `tests/e2e/zoom.smoke.spec.ts`
-asserts both ends of each range plus the degraded state.
+No decorative parallax. Everything above is off under `prefers-reduced-motion`,
+where content is simply present, and `tests/e2e/zoom.smoke.spec.ts` asserts
+both ends of each range plus the degraded state.
 
 The hero is static server markup: a photograph slot, one headline, six
 capability callouts, and the method strip. Nothing in it waits on JavaScript.
