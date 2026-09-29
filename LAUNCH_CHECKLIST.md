@@ -98,8 +98,9 @@ once the identity exists.
 
 ### `case-studies` · 3–6 real case studies
 
-Three reserved slots render as abstract plates. They are `noindex` and excluded
-from the sitemap. The listing, the capability filters, the detail template, and
+Three **sample** case studies with fictional clients (visibly labelled
+"Sample", no results) and one reserved slot fill the grid today. All four are
+`noindex` and excluded from the sitemap. **Delete the samples** before launch. The listing, the capability filters, the detail template, and
 the homepage grid are all live and will populate without a code change.
 **Do:** for each piece — title, written client permission, sector, capabilities,
 challenge, approach, deliverables, cover asset. Set `status: "published"` in
@@ -109,6 +110,11 @@ challenge, approach, deliverables, cover asset. Set `status: "published"` in
 > it. Results go in only when the client supplies and approves the figures.
 
 ### `case-study-media` · Portfolio media
+
+**Hero photo:** the homepage hero expects a clean, text-free studio desk shot
+at `public/hero.webp` (about 2400×1300). Callout dots in
+[`Hero.tsx`](src/components/sections/Hero.tsx) are positioned as percentages;
+nudge them to sit on the objects in the final photo.
 
 **Do:** 8–15 high-resolution stills (WebP/AVIF), and 2–3 muted loops of 6–12
 seconds as WebM + MP4 with poster frames. Keep hero-adjacent video under ~3 MB
@@ -131,10 +137,10 @@ The About page has a team section built and hidden. No colleagues are invented.
 ### `insights` · Notes
 
 `/notes` shows an empty state and is deliberately **not** in the primary nav,
-per `SITE_AND_CONTENT.md`. One template sample exists so the article layout is
-reviewable; it has no byline or date, is `noindex`, and is excluded from the
-sitemap.
-**Do:** publish a real note, delete the sample, then add Notes to `primaryNav`
+per `SITE_AND_CONTENT.md`. Four sample notes exist so the section is
+reviewable at real length; they have no byline or date, are `noindex`, and are
+excluded from the sitemap.
+**Do:** publish a real note, delete the samples, then add Notes to `primaryNav`
 in [`src/lib/site.ts`](src/lib/site.ts).
 
 ### `contact-phone-address` · Phone and postal address

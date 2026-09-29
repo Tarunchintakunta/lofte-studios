@@ -60,7 +60,7 @@ src/
   components/
     layout/             Section, Container, Header, Footer, PageHero
     sections/           Homepage sections
-    signal/             The hero signal field and its geometry
+    signal/             Abstract work plates (case-study stand-ins)
     seo/                JSON-LD and the analytics placeholder
     ui/                 Button, TextLink, form fields, PlaceholderNote
   content/              Typed seed content + the Zod schemas that guard it
@@ -81,31 +81,27 @@ two layers: fixed brand constants, and surface-aware semantics that
 can be flipped between editorial fields without touching a component.
 
 Contrast was measured rather than assumed, and the results are encoded as
-rules: Løfte blue is 3.20:1 on ink, so it is reserved for surfaces and CTAs and
+rules: the brand orange CTA fill carries white text at 4.87:1; it is reserved for surfaces and CTAs and
 never used as body text there; coral is 2.36:1 on paper, so a darkened coral is
 the only one permitted on that field.
 
 ### Motion
 
-GSAP (through `@gsap/react`'s `useGSAP`) runs in exactly four places, each a
+GSAP (through `@gsap/react`'s `useGSAP`) runs in exactly three places, each a
 deliberate moment rather than an effect:
 
 | Moment     | Behaviour                                                                                        |
 | ---------- | ------------------------------------------------------------------------------------------------ |
-| Hero       | The plate settles `1.10 → 1` while the scattered fragments resolve, once, on load                |
 | Feature    | A pinned frame scrubs `0.86 → 1.03` — from 768px up, `pinType: "transform"`, one viewport of pin |
 | Method     | The step rail advances as the six steps scroll past a sticky panel                               |
 | Work cards | `scale(1.04)` inside a clipped frame, hover-capable pointers only, with a matching focus state   |
 
-There is no universal fade-up and no decorative parallax. Every one of the four
+There is no universal fade-up and no decorative parallax. Every one of the three
 is off under `prefers-reduced-motion`, and `tests/e2e/zoom.smoke.spec.ts`
 asserts both ends of each range plus the degraded state.
 
-The hero's markup **is** the resolved composition; GSAP animates _from_ the
-scattered offsets. So a visitor with no JavaScript, or with reduced motion on,
-lands on the finished artwork rather than a skeleton.
-`tests/e2e/motion.smoke.spec.ts` asserts both ends of that contract, and
-`resilience.smoke.spec.ts` covers the degraded paths.
+The hero is static server markup: a photograph slot, one headline, six
+capability callouts, and the method strip. Nothing in it waits on JavaScript.
 
 ### Content
 
@@ -115,8 +111,9 @@ in `src/lib/placeholders.ts`. A test fails the build if a registered
 placeholder is missing from `LAUNCH_CHECKLIST.md`.
 
 Two editorial rules are enforced by the content schema rather than remembered:
-an unapproved testimonial or client logo is never rendered, and a case study
-marked `reserved` cannot carry results.
+an unapproved testimonial or client logo is never rendered, and only a
+`published` case study can carry results. Demo content is marked `sample`,
+labelled on the page, and kept out of search indexing.
 
 ## Deploying to Vercel
 
@@ -156,5 +153,4 @@ After the first production deploy:
 
 DM Sans and Manrope are SIL Open Font License, self-hosted through `next/font`
 — no request leaves for a font CDN. No stock photography, no third-party
-illustration, and no borrowed layout is used anywhere; every graphic is
-generated from the site's own `signal/` geometry.
+illustration is used. The hero photograph is supplied by the studio.
