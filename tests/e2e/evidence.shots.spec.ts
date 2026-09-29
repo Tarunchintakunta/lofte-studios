@@ -66,14 +66,6 @@ for (const viewport of VIEWPORTS) {
         ["4-room", 0.95],
       ]);
     });
-
-    test("for reel, three points on the focal line", async ({ page }) => {
-      await walk(page, "#for", "reel", [
-        ["1-first", 0],
-        ["2-middle", 0.5],
-        ["3-last", 0.98],
-      ]);
-    });
   });
 }
 

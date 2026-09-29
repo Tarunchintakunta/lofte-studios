@@ -42,7 +42,7 @@ async function pinTop(page: Page, selector: string): Promise<number> {
 
 async function scrollTo(page: Page, y: number) {
   await page.evaluate((top) => window.scrollTo({ top, behavior: "instant" }), y);
-  // The portal scrubs at 0.55 and the reel at 0.45, so roughly half a second
+  // The portal scrubs at 0.55, so roughly half a second
   // of wall clock is enough to catch up with an instant jump. The margin is
   // generous on purpose — these assert the resting values, not the lag.
   await page.waitForTimeout(750);
@@ -122,18 +122,13 @@ test.describe("with motion allowed", () => {
     expect(await opacityOf(page, ".portal-ambient")).toBeCloseTo(1, 1);
   });
 
-  test("the pins are the length they say they are", async ({ page }) => {
+  test("the portal pin is the length it says it is", async ({ page }) => {
     await ready(page);
-    // Both are deliberately bounded: together they already hold the visitor for
-    // a quarter of the homepage, and a pin that overstays reads as a page that
-    // has stopped responding.
+    // Deliberately bounded: a pin that overstays reads as a page that has
+    // stopped responding.
     const portal = await pinDistance(page, "#feature"); // +=180% of 900
     expect(portal).toBeGreaterThan(1530);
     expect(portal).toBeLessThan(1710);
-
-    const reel = await pinDistance(page, "#for"); // +=200% of 900
-    expect(reel).toBeGreaterThan(1710);
-    expect(reel).toBeLessThan(1890);
   });
 
   test("portal: the room is unreachable by keyboard until it is visible", async ({
@@ -183,142 +178,11 @@ test.describe("with motion allowed", () => {
       page.locator("#feature").getByRole("link", { name: "See selected work" }),
     ).toBeVisible();
     await expect(
-      page.locator("#feature").getByRole("link", { name: "Selected work", exact: true }),
+      page.locator("#feature").locator("[data-feature-frame] a"),
     ).toBeVisible();
   });
 
-  test("reel: every audience takes the focal line, in order", async ({ page }) => {
-    await ready(page);
-    const top = await pinTop(page, "#for");
-    const distance = await pinDistance(page, "#for");
-
-    const count = await page.locator("[data-audience]").count();
-    expect(count, "the reel lost its audiences").toBeGreaterThan(5);
-
-    const seen: string[] = [];
-    for (let i = 0; i < count; i += 1) {
-      await scrollTo(page, top + (distance * i) / (count - 1));
-
-      expect(
-        Math.abs(await page.$eval("#for", (el) => el.getBoundingClientRect().top)),
-        `the reel unpinned at item ${i}`,
-      ).toBeLessThan(4);
-
-      const active = page.locator('[data-audience][data-focus="true"]');
-      await expect(active, `no single item held the line at step ${i}`).toHaveCount(1);
-
-      // The focused item is the one crossing the middle of the viewport.
-      const centre = await active.evaluate((el) => {
-        const box = el.getBoundingClientRect();
-        return box.top + box.height / 2;
-      });
-      expect(
-        Math.abs(centre - 450),
-        `item ${i} took focus ${Math.round(centre - 450)}px off the focal line`,
-      ).toBeLessThan(40);
-
-      seen.push((await active.innerText()).split("\n")[0]);
-    }
-
-    // Every audience, each exactly once, in document order.
-    const labels = await page.$$eval("[data-audience]", (els) =>
-      els.map((el) => (el as HTMLElement).innerText.split("\n")[0]),
-    );
-    expect(seen).toEqual(labels);
-  });
-
-  /**
-   * Responsiveness, not correctness: the other reel tests scroll, wait, and read
-   * a resting value, which a badly lagging scrub still passes. This one scrolls
-   * *continuously* at a normal flick speed and measures how far the track is
-   * running behind the scroll that is driving it.
-   *
-   * Note what is deliberately NOT measured: the distance from the focused item
-   * to the focal line. Focus is a rounded index, so an item legitimately owns
-   * the line from half a spacing before it to half a spacing after — roughly
-   * ±70px here. That number looks like lag and is not.
-   */
-  test("reel: the track keeps up with a continuous scroll", async ({ page }) => {
-    await ready(page);
-    const top = await pinTop(page, "#for");
-
-    const result = await page.evaluate(async (startY) => {
-      const reel = document.getElementById("for")!;
-      const track = document.querySelector<HTMLElement>(".reel-track")!;
-      const spacer = reel.parentElement!;
-      const distance =
-        spacer.getBoundingClientRect().height - reel.getBoundingClientRect().height;
-      const items = Array.from(document.querySelectorAll<HTMLElement>("[data-audience]"));
-
-      // The same centres the component interpolates across, so "where the track
-      // ought to be for this scroll position" is computed the same way.
-      const centres = items.map((el) => el.offsetTop + el.offsetHeight / 2);
-      const idealY = (p: number) => {
-        const span = p * (centres.length - 1);
-        const i = Math.min(centres.length - 2, Math.floor(span));
-        return -(centres[i] + (centres[i + 1] - centres[i]) * (span - i));
-      };
-      const actualY = () => new DOMMatrixReadOnly(getComputedStyle(track).transform).f;
-
-      window.scrollTo({ top: startY - 400, behavior: "instant" });
-      await new Promise((r) => setTimeout(r, 900));
-
-      const lag: number[] = [];
-      const behind: number[] = [];
-      let y = startY;
-      for (let i = 0; i < 100; i += 1) {
-        y += 18; // ≈1080px/s at 60fps — an ordinary trackpad flick
-        window.scrollTo({ top: y, behavior: "instant" });
-        await new Promise((r) => requestAnimationFrame(r));
-
-        const p = Math.min(1, Math.max(0, (y - startY) / distance));
-        lag.push(Math.abs(actualY() - idealY(p)));
-
-        const actual = items.findIndex((el) => el.dataset.focus === "true");
-        if (actual >= 0)
-          behind.push(Math.abs(Math.round(p * (items.length - 1)) - actual));
-      }
-      const avg = (v: number[]) => v.reduce((a, b) => a + b, 0) / v.length;
-      return {
-        samples: lag.length,
-        spacing: Math.round((centres.at(-1)! - centres[0]) / (centres.length - 1)),
-        maxLagPx: Math.round(Math.max(...lag)),
-        avgLagPx: Math.round(avg(lag)),
-        avgBehind: Number(avg(behind).toFixed(2)),
-        maxBehind: Math.max(...behind),
-      };
-    }, top);
-
-    expect(result.samples).toBeGreaterThan(50);
-    expect(
-      result.avgLagPx,
-      `the track ran an average of ${result.avgLagPx}px behind the scroll ` +
-        `(worst ${result.maxLagPx}px, item spacing ${result.spacing}px) — ` +
-        `the scrub is too long`,
-    ).toBeLessThan(45);
-    expect(
-      result.avgBehind,
-      `the wrong audience held the line for much of the sweep ` +
-        `(avg ${result.avgBehind} items behind, worst ${result.maxBehind})`,
-    ).toBeLessThan(0.35);
-  });
-
-  test("reel: the item on the line is coral and the rest are dimmed", async ({
-    page,
-  }) => {
-    await ready(page);
-    await scrollTo(page, await pinTop(page, "#for"));
-
-    const active = page.locator('[data-audience][data-focus="true"]');
-    await expect(active).toHaveCSS("color", "rgb(255, 106, 31)"); // --color-coral
-    await expect(active).toHaveCSS("opacity", "1");
-
-    const dimmed = page.locator('[data-audience][data-focus="false"]').first();
-    await expect(dimmed).toHaveCSS("opacity", "0.22");
-    await expect(dimmed).toHaveCSS("color", "rgb(196, 196, 194)"); // --color-mist
-  });
-
-  test("reel: every audience is a link to a service that exists", async ({
+  test("for: every audience is a link to a service that exists", async ({
     page,
     request,
   }) => {
@@ -377,10 +241,10 @@ test.describe("with motion allowed", () => {
 test.describe("narrow viewport", () => {
   test.use({ reducedMotion: "no-preference", viewport: { width: 375, height: 812 } });
 
-  test("neither section pins on a phone, and both read in full", async ({ page }) => {
+  test("the portal does not pin on a phone, and reads in full", async ({ page }) => {
     await ready(page);
 
-    for (const id of ["#for", "#feature"]) {
+    for (const id of ["#feature"]) {
       const sectionTop = await page.$eval(
         id,
         (el) => el.getBoundingClientRect().top + window.scrollY,
@@ -400,20 +264,13 @@ test.describe("narrow viewport", () => {
     await expect(
       page.getByRole("heading", { name: "Built for clarity under scrutiny." }),
     ).toBeVisible();
-
-    // Nothing in the reel is dimmed when there is no focal line to be off.
-    const dimmed = await page.$$eval(
-      "[data-audience]",
-      (els) => els.filter((el) => Number(getComputedStyle(el).opacity) < 0.9).length,
-    );
-    expect(dimmed, "audiences were dimmed with no reel to dim them for").toBe(0);
   });
 });
 
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce", viewport: { width: 1440, height: 900 } });
 
-  test("no zoom anywhere — portal, reel, or card", async ({ page }) => {
+  test("no zoom anywhere — portal or card", async ({ page }) => {
     await page.goto("/", { waitUntil: "load" });
     await page.waitForTimeout(1200);
 
@@ -444,20 +301,19 @@ test.describe("reduced motion", () => {
     ).toBeCloseTo(1, 2);
   });
 
-  test("the reel reads as a plain list of links", async ({ page }) => {
+  test("the audiences read as a row of links", async ({ page }) => {
     await page.goto("/", { waitUntil: "load" });
     const items = page.locator("[data-audience]");
     const count = await items.count();
     expect(count).toBeGreaterThan(5);
 
-    for (let i = 0; i < count; i += 1) {
-      await expect(items.nth(i)).toBeVisible();
-    }
+    // A scrolling row: every card is attached, the first is on screen.
+    await expect(items.first()).toBeVisible();
 
     // No pin-spacer was ever built, so nothing is holding anyone anywhere.
     // (`pinDistance` cannot answer this: with no spacer it measures the section
     // against `<main>` and returns the rest of the page.)
-    for (const id of ["#for", "#feature"]) {
+    for (const id of ["#feature"]) {
       expect(
         await page.$eval(
           id,

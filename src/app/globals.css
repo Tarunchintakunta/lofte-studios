@@ -584,120 +584,40 @@
 }
 
 /* ==========================================================================
-   The "For" reel
+   Reveal
    --------------------------------------------------------------------------
-   Used by `src/components/sections/ForAudienceReel.tsx`.
-
-   A single word holds still on the left while the audiences it belongs to run
-   past a focal line on the right. The focus state is expressed as a data
-   attribute rather than a tween, so CSS owns the transition and GSAP only ever
-   reports which item is on the line — one attribute write per crossing
-   instead of a property tween per item per frame.
-
-   Gated exactly as the portal is. Under the fallback nothing is dimmed, no
-   mask is applied, and the reel is a list of links.
+   Used by `src/components/ui/Reveal.tsx`. Content rises into place the first
+   time it enters the viewport. Gated on `html.js` and motion preference, so
+   without JavaScript or with reduced motion everything is simply there.
    ========================================================================== */
 
-.reel-item {
-  transform-origin: left center;
-  /* Fast on purpose. This transition is spent *on top of* the scrub's own
-     catch-up, so a leisurely one reads as the highlight trailing the line. */
-  transition:
-    color var(--duration-fast) var(--ease-quiet),
-    opacity var(--duration-fast) var(--ease-quiet),
-    transform var(--duration-fast) var(--ease-signal);
-}
-
-.reel-lead,
-.reel-node {
-  transition:
-    opacity var(--duration-fast) var(--ease-quiet),
-    transform var(--duration-fast) var(--ease-signal);
-}
-
-.reel-node {
-  transform-origin: left center;
-}
-
-@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
-  html.js .reel-stage {
-    height: 100svh;
-    padding-block: 0;
-    overflow: hidden;
-    contain: paint;
-  }
-
-  /* The focal window. The mask is the whole reason the list can overflow a
-     viewport without a hard edge: items arrive and leave as light, not as
-     cropped type. */
-  html.js .reel-viewport {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    -webkit-mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      #000 25%,
-      #000 75%,
-      transparent 100%
-    );
-    mask-image: linear-gradient(
-      to bottom,
-      transparent 0%,
-      #000 25%,
-      #000 75%,
-      transparent 100%
-    );
-  }
-
-  html.js .reel-track {
-    position: absolute;
-    top: 50%;
-    right: 0;
-    left: 0;
-    will-change: transform;
-  }
-
-  html.js .reel-item {
-    color: var(--color-mist);
-    opacity: 0.22;
-  }
-
-  html.js .reel-item[data-focus="true"] {
-    color: var(--color-coral);
-    opacity: 1;
-    transform: scale(1.04);
-  }
-
-  /* A dimmed item is still a link. Whoever is reaching for one needs to be able
-     to see which, so pointing at it or tabbing to it lifts it out of the dim —
-     in paper rather than coral, because coral means "on the line", not "under
-     the cursor". */
-  html.js .reel-item:focus-visible {
-    color: var(--color-paper);
-    opacity: 1;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    html.js .reel-item:hover {
-      color: var(--color-paper);
-      opacity: 1;
-    }
-  }
-
-  html.js .reel-lead {
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal] {
     opacity: 0;
+    transform: translateY(2.5rem);
+    transition:
+      opacity 900ms var(--ease-signal),
+      transform 900ms var(--ease-signal);
+    transition-delay: var(--reveal-delay, 0ms);
   }
 
-  html.js .reel-item[data-focus="true"] .reel-lead {
+  html.js [data-reveal][data-shown] {
     opacity: 1;
+    transform: none;
   }
+}
 
-  html.js .reel-node {
-    transform: scaleX(0);
-  }
+/* Horizontal card gallery: native scroll with snap, no hijacking. */
+.gallery {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
 
-  html.js .reel-item[data-focus="true"] .reel-node {
-    transform: scaleX(1);
-  }
+.gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery > * {
+  scroll-snap-align: start;
 }
