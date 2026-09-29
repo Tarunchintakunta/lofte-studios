@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { WorkPlate } from "@/components/signal/WorkPlate";
+import { WorkCover } from "@/components/work/WorkCover";
 import { cn } from "@/lib/cn";
 import { capabilities } from "@/content/capabilities";
 import type { CaseStudy } from "@/content/case-studies";
@@ -57,12 +58,14 @@ export function WorkCard({
               sizes={wide ? "100vw" : "(min-width: 768px) 50vw, 100vw"}
               className="media-zoom h-full w-full object-cover"
             />
-          ) : (
+          ) : isReserved ? (
             <WorkPlate
               seed={seed}
               ratio={wide ? "wide" : "standard"}
               className="media-zoom"
             />
+          ) : (
+            <WorkCover study={study} seed={seed} size={size} className="media-zoom" />
           )}
         </div>
         <Heading

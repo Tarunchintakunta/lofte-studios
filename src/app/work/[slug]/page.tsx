@@ -6,6 +6,7 @@ import { ClosingCta } from "@/components/sections/ClosingCta";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
 import { TextLink } from "@/components/ui/TextLink";
 import { WorkPlate } from "@/components/signal/WorkPlate";
+import { WorkCover } from "@/components/work/WorkCover";
 import { pageMetadata } from "@/lib/metadata";
 import { getCaseStudies, getCaseStudy } from "@/lib/content";
 import { capabilities } from "@/content/capabilities";
@@ -80,8 +81,10 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
               priority
               className="h-full w-full object-cover"
             />
-          ) : (
+          ) : isReserved ? (
             <WorkPlate seed={study.slug.length + 3} ratio="wide" />
+          ) : (
+            <WorkCover study={study} seed={study.slug.length} size="wide" />
           )}
         </div>
         {isReserved ? (
