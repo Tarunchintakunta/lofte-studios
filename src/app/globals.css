@@ -23,26 +23,28 @@
 
 @theme {
   /* --- Light fields --------------------------------------------------- */
-  --color-chalk: #fbfaf5; /* lightest field */
-  --color-paper: #f4f1e8; /* the brief's paper — the main field */
-  --color-paper-deep: #edeadf; /* footer and raised panels */
-  --color-wash: #dcddeb; /* blue-tinted field for the invitation */
+  --color-chalk: #ffffff; /* lightest field */
+  --color-paper: #f5f5f4; /* the brief's paper — the main field */
+  --color-paper-deep: #ebebe9; /* footer and raised panels */
+  --color-wash: #e6e6e3; /* grey field for the invitation */
 
   /* --- Ink, now a type colour rather than a ground -------------------- */
-  --color-ink: #07111e; /* primary text — 16.78:1 on paper */
-  --color-ink-raised: #101a27;
-  --color-ink-sunken: #040b14;
+  --color-ink: #0c0c0c; /* primary text — 16.78:1 on paper */
+  --color-ink-raised: #181818;
+  --color-ink-sunken: #050505;
 
   /* --- Brand constants ------------------------------------------------ */
-  --color-blue: #284bff; /* decisive CTAs and active surfaces */
-  --color-blue-deep: #1c3ae0; /* link text on light (6.81:1), CTA hover */
-  --color-sky: #6ca9ff; /* highlight on ink only — fails on paper */
-  --color-coral: #ff735d; /* on ink only — 2.36:1 on paper */
-  --color-coral-deep: #c43e28; /* the only coral permitted on light (4.57:1) */
-  --color-mist: #b8c6d5; /* subdued text on ink (10.90:1) */
-  --color-mist-dim: #8697a9;
-  --color-slate: #4a5258; /* secondary text on light (7.05:1 on paper) */
-  --color-slate-dim: #5f666d; /* tertiary — clears AA on all three light
+  --color-blue: #c8440f; /* PALETTE: orange/white/grey/black. Token keeps its old
+                               name so no component changes; orange CTA fill,
+                               white text on it 4.87:1 */
+  --color-blue-deep: #9a3412; /* deep orange: link text on light (~7:1), CTA hover */
+  --color-sky: #ff9a5c; /* light orange: highlight on ink only — fails on white */
+  --color-coral: #ff6a1f; /* on ink only — 2.36:1 on paper */
+  --color-coral-deep: #b83a0e; /* the only coral permitted on light (4.57:1) */
+  --color-mist: #c4c4c2; /* subdued text on ink (10.90:1) */
+  --color-mist-dim: #8f8f8c;
+  --color-slate: #4d4d4b; /* secondary text on light (7.05:1 on paper) */
+  --color-slate-dim: #626260; /* tertiary — clears AA on all three light
                                   fields (5.57 / 5.15 / 4.83) */
 
   /* --- Typography ---------------------------------------------------- */
@@ -398,17 +400,7 @@
 
 /* ==========================================================================
    Motion
-   --------------------------------------------------------------------------
-   Elements a GSAP timeline will animate start hidden ONLY when JS is running
-   and motion is allowed. Without JS — and under reduced motion — the `.signal-*`
-   classes are inert, so content renders in full, in document order.
    ========================================================================== */
-
-@media (prefers-reduced-motion: no-preference) {
-  html.js .signal-hidden {
-    opacity: 0;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -569,7 +561,8 @@
     background-image: radial-gradient(
       circle at var(--aperture-x) var(--aperture-y),
       transparent 0 calc(var(--aperture-r) - 2.5px),
-      color-mix(in oklab, var(--color-sky) 78%, transparent) calc(var(--aperture-r) - 0.5px),
+      color-mix(in oklab, var(--color-sky) 78%, transparent)
+        calc(var(--aperture-r) - 0.5px),
       transparent calc(var(--aperture-r) + 1.5px)
     );
   }

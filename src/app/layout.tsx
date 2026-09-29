@@ -16,7 +16,7 @@ import "./globals.css";
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin", "latin-ext"], // latin-ext carries the ø
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "800"],
   display: "swap",
   fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
   adjustFontFallback: true,
