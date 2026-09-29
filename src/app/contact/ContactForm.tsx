@@ -84,7 +84,7 @@ export function ContactForm() {
   }
 
   return (
-    <form action={action} noValidate className="border-rule border-t pt-8">
+    <form action={action} noValidate>
       {/* Live region: announced when the server rejects a submission. */}
       <div
         ref={summaryRef}

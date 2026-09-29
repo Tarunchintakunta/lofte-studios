@@ -21,16 +21,18 @@ export default function ContactPage() {
         standfirst="Tell us what you are trying to get across and who needs to understand it. We will come back with what we would make, and what we would leave alone."
       />
 
-      <Section surface="paper" size="none" className="pb-(--spacing-section)">
+      <Section surface="chalk" size="none" className="pb-(--spacing-section)">
         <Container>
-          <div className="grid gap-x-12 gap-y-12 lg:grid-cols-12">
-            <div className="lg:col-span-7">
+          <div className="grid gap-4 lg:grid-cols-12">
+            <div className="bg-paper rounded-[2rem] p-6 md:p-10 lg:col-span-8">
               <ContactForm />
             </div>
 
-            <aside className="lg:col-span-4 lg:col-start-9">
-              <div className="border-rule border-t pt-8">
-                <h2 className="text-heading-1 font-display">What happens next</h2>
+            <aside className="lg:col-span-4">
+              <div className="bg-paper rounded-[2rem] p-8 lg:sticky lg:top-28">
+                <h2 className="text-heading-1 font-display font-semibold">
+                  What happens next
+                </h2>
                 <ol className="mt-6 flex flex-col gap-5">
                   {[
                     "A person reads it. Not a form router, and not an automated qualifier.",
