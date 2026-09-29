@@ -9,6 +9,11 @@ import { Container, Section } from "@/components/layout/Section";
 import { ButtonLink } from "@/components/ui/Button";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
 import { WorkPlate } from "@/components/signal/WorkPlate";
+import { WorkCover } from "@/components/work/WorkCover";
+import { caseStudies } from "@/content/case-studies";
+
+/** The piece shown in the room: the first one with real content behind it. */
+const featured = caseStudies.find((study) => study.status !== "reserved");
 
 /**
  * The room-in scroll: one aperture, scaled until you are through it.
@@ -306,8 +311,9 @@ export function FeatureZoom() {
                     </ButtonLink>
                   </div>
                   <PlaceholderNote className="mt-8">
-                    An abstract composition from Løfte&rsquo;s own signal system — not a
-                    client project.
+                    {featured?.status === "sample"
+                      ? "A sample project with a fictional client, shown to demonstrate the layout."
+                      : "An abstract composition from Løfte\u2019s own signal system — not a client project."}
                   </PlaceholderNote>
                 </div>
               </div>
@@ -334,16 +340,25 @@ export function FeatureZoom() {
                       accessible name read as a stutter in a screen reader's
                       link list, and this one is the frame, not the call. */}
                   <Link
-                    href="/work"
-                    aria-label="Selected work"
+                    href={featured ? `/work/${featured.slug}` : "/work"}
+                    aria-label={featured ? featured.title : "Selected work"}
                     className="media-frame portal-glass relative block"
                   >
                     <span className="block aspect-[16/10] w-full overflow-hidden">
-                      <WorkPlate
-                        seed={9}
-                        ratio="wide"
-                        className="media-zoom bg-transparent"
-                      />
+                      {featured ? (
+                        <WorkCover
+                          study={featured}
+                          seed={1}
+                          size="wide"
+                          className="media-zoom"
+                        />
+                      ) : (
+                        <WorkPlate
+                          seed={9}
+                          ratio="wide"
+                          className="media-zoom bg-transparent"
+                        />
+                      )}
                     </span>
                   </Link>
                 </div>
