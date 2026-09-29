@@ -80,16 +80,16 @@ export function Container({
 /**
  * Section masthead. No all-caps eyebrow: the brief rules those out.
  *
- * `center` is the homepage's large, centred headline — one statement per
- * screen. `start` is the editorial variant with a hairline and a column for
- * an aside, used on the inner pages.
+ * `center` (the default) is the large, centred headline — one statement per
+ * screen. `start` is the older editorial variant with a hairline and a column
+ * for an aside, kept for layouts that need a heading beside content.
  */
 export function SectionHead({
   id,
   heading,
   standfirst,
   aside,
-  align = "start",
+  align = "center",
   className,
 }: {
   id?: string;

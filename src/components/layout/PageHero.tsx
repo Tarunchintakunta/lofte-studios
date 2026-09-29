@@ -3,9 +3,9 @@ import { Container, Section } from "@/components/layout/Section";
 import { cn } from "@/lib/cn";
 
 /**
- * The masthead every interior page opens with. Top padding clears the floating
- * nav; the kicker is a real breadcrumb-style label rather than a decorative
- * all-caps eyebrow, which DESIGN_BRIEF.md rules out.
+ * The masthead every interior page opens with: one large centred headline,
+ * a centred standfirst, and anything in `aside` (a button, a row of facts)
+ * sitting centred beneath it. Top padding clears the floating nav.
  */
 export function PageHero({
   kicker,
@@ -24,24 +24,24 @@ export function PageHero({
 }) {
   return (
     <Section
-      surface="paper"
+      surface="chalk"
       size="none"
-      className={cn("pt-32 pb-(--spacing-section-tight) md:pt-40", className)}
+      className={cn("pt-36 pb-(--spacing-section-tight) md:pt-48", className)}
     >
       <Container>
-        <div className="lg:grid lg:grid-cols-12 lg:gap-x-12">
-          <div className="lg:col-span-8">
-            {kicker ? <p className="text-body-sm text-fg-subtle mb-5">{kicker}</p> : null}
-            <h1 className="optical-left text-display-1 max-w-[16ch]">{title}</h1>
-            {standfirst ? (
-              <p className="measure-wide text-body-lg text-fg-muted mt-8">{standfirst}</p>
-            ) : null}
-          </div>
-          {aside ? (
-            <div className="mt-10 lg:col-span-3 lg:col-start-10 lg:mt-0 lg:self-end">
-              {aside}
-            </div>
+        <div className="mx-auto max-w-5xl text-center">
+          {kicker ? (
+            <p className="text-body text-fg-subtle mb-5 font-semibold">{kicker}</p>
           ) : null}
+          <h1 className="text-display-1 font-display mx-auto max-w-[18ch] font-semibold tracking-[-0.045em] text-balance">
+            {title}
+          </h1>
+          {standfirst ? (
+            <p className="text-body-lg text-fg-muted mx-auto mt-8 max-w-2xl text-balance">
+              {standfirst}
+            </p>
+          ) : null}
+          {aside ? <div className="mt-10 flex justify-center">{aside}</div> : null}
         </div>
         {children}
       </Container>
