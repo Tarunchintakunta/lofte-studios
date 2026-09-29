@@ -203,9 +203,10 @@ export function Header() {
               "transition-[margin,padding,background-color,border-color,backdrop-filter]",
               "duration-[--duration-base] ease-[--ease-quiet]",
               "motion-reduce:transition-none",
-              tight
-                ? "mt-2 py-1 pl-4 md:mt-2 md:pl-5"
-                : "mt-3 py-2 pl-4 md:mt-4 md:pl-6",
+              tight ? "mt-2 py-1 pl-4 md:mt-2 md:pl-5" : "mt-3 py-2 pl-4 md:mt-4 md:pl-6",
+              // Over the homepage's dark hero the resting bar flips to the ink
+              // field's tokens, so every label turns light without a variant.
+              !lifted && !open && pathname === "/" && "surface-ink",
               lifted || open
                 ? "border-rule bg-[color-mix(in_oklab,var(--color-chalk)_80%,transparent)] backdrop-blur-xl"
                 : "border-transparent bg-transparent",
@@ -292,7 +293,7 @@ export function Header() {
                 className={cn(
                   "rounded-capsule border-rule-strong text-body-sm border px-4",
                   "text-fg transition-all duration-[--duration-base] lg:hidden",
-                  "motion-reduce:transition-none hover:border-fg",
+                  "hover:border-fg motion-reduce:transition-none",
                   tight ? "py-2.5" : "py-3",
                 )}
               >
