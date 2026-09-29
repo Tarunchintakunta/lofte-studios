@@ -58,26 +58,7 @@ async function ready(page: Page) {
 test.describe("with motion allowed", () => {
   test.use({ reducedMotion: "no-preference", viewport: { width: 1440, height: 900 } });
 
-  test("hero: the field settles from an oversized start to exactly 1", async ({
-    page,
-  }) => {
-    await page.goto("/", { waitUntil: "load" });
-    await page.waitForTimeout(150);
-
-    const early = await scaleOf(page, "[data-signal-frame] svg");
-    expect(early, "the hero plate never started oversized").toBeGreaterThan(1.01);
-    expect(early, "the hero start is outside the 1.08–1.12 brief").toBeLessThanOrEqual(
-      1.12,
-    );
-
-    await page.waitForTimeout(3000);
-    const settled = await scaleOf(page, "[data-signal-frame] svg");
-    expect(settled).toBeCloseTo(1, 2);
-  });
-
-  test("portal: the sheet scales 1 → 45, and does it exponentially", async ({
-    page,
-  }) => {
+  test("portal: the sheet scales 1 → 45, and does it exponentially", async ({ page }) => {
     await ready(page);
     const top = await pinTop(page, "#feature");
     const distance = await pinDistance(page, "#feature");
@@ -267,9 +248,7 @@ test.describe("with motion allowed", () => {
       const spacer = reel.parentElement!;
       const distance =
         spacer.getBoundingClientRect().height - reel.getBoundingClientRect().height;
-      const items = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-audience]"),
-      );
+      const items = Array.from(document.querySelectorAll<HTMLElement>("[data-audience]"));
 
       // The same centres the component interpolates across, so "where the track
       // ought to be for this scroll position" is computed the same way.
@@ -279,8 +258,7 @@ test.describe("with motion allowed", () => {
         const i = Math.min(centres.length - 2, Math.floor(span));
         return -(centres[i] + (centres[i + 1] - centres[i]) * (span - i));
       };
-      const actualY = () =>
-        new DOMMatrixReadOnly(getComputedStyle(track).transform).f;
+      const actualY = () => new DOMMatrixReadOnly(getComputedStyle(track).transform).f;
 
       window.scrollTo({ top: startY - 400, behavior: "instant" });
       await new Promise((r) => setTimeout(r, 900));
@@ -297,7 +275,8 @@ test.describe("with motion allowed", () => {
         lag.push(Math.abs(actualY() - idealY(p)));
 
         const actual = items.findIndex((el) => el.dataset.focus === "true");
-        if (actual >= 0) behind.push(Math.abs(Math.round(p * (items.length - 1)) - actual));
+        if (actual >= 0)
+          behind.push(Math.abs(Math.round(p * (items.length - 1)) - actual));
       }
       const avg = (v: number[]) => v.reduce((a, b) => a + b, 0) / v.length;
       return {
@@ -331,12 +310,12 @@ test.describe("with motion allowed", () => {
     await scrollTo(page, await pinTop(page, "#for"));
 
     const active = page.locator('[data-audience][data-focus="true"]');
-    await expect(active).toHaveCSS("color", "rgb(255, 115, 93)"); // --color-coral
+    await expect(active).toHaveCSS("color", "rgb(255, 106, 31)"); // --color-coral
     await expect(active).toHaveCSS("opacity", "1");
 
     const dimmed = page.locator('[data-audience][data-focus="false"]').first();
     await expect(dimmed).toHaveCSS("opacity", "0.22");
-    await expect(dimmed).toHaveCSS("color", "rgb(184, 198, 213)"); // --color-mist
+    await expect(dimmed).toHaveCSS("color", "rgb(196, 196, 194)"); // --color-mist
   });
 
   test("reel: every audience is a link to a service that exists", async ({
@@ -434,10 +413,9 @@ test.describe("narrow viewport", () => {
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce", viewport: { width: 1440, height: 900 } });
 
-  test("no zoom anywhere — hero, portal, reel, or card", async ({ page }) => {
+  test("no zoom anywhere — portal, reel, or card", async ({ page }) => {
     await page.goto("/", { waitUntil: "load" });
     await page.waitForTimeout(1200);
-    expect(await scaleOf(page, "[data-signal-frame] svg")).toBeCloseTo(1, 2);
 
     const sectionTop = await page.$eval(
       "#feature",

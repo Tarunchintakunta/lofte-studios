@@ -104,21 +104,14 @@ test.describe("navigation bar", () => {
   });
 });
 
-test.describe("hero settle", () => {
+test.describe("hero", () => {
   test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
 
-  test("captures the oversized start and the settled state", async ({ page }) => {
+  test("captures the first screen", async ({ page }) => {
     await page.goto("/", { waitUntil: "load" });
-    await page.waitForTimeout(160);
-    await page.screenshot({
-      path: shot("hero-entry"),
-      clip: { x: 760, y: 60, width: 680, height: 800 },
-    });
-    await page.waitForTimeout(3000);
-    await page.screenshot({
-      path: shot("hero-settled"),
-      clip: { x: 760, y: 60, width: 680, height: 800 },
-    });
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(400);
+    await page.screenshot({ path: shot("hero") });
   });
 });
 

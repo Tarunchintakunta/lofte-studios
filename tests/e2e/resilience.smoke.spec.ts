@@ -9,23 +9,13 @@ import { expect, test } from "@playwright/test";
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
 
-  test("no GSAP transform is written, and the field is already resolved", async ({
+  test("the hero is complete: headline, CTA, and all six capabilities", async ({
     page,
   }) => {
     await page.goto("/", { waitUntil: "load" });
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(1200);
-
-    const transformed = await page.$$eval(
-      "[data-fragment]",
-      (els) => els.filter((el) => (el.getAttribute("transform") ?? "").length > 0).length,
-    );
-    expect(transformed, "GSAP ran despite prefers-reduced-motion").toBe(0);
-
-    // Every fragment is present and painted.
-    const count = await page.locator("[data-fragment]").count();
-    expect(count).toBeGreaterThan(40);
-    await expect(page.locator("[data-fragment]").first()).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.getByRole("link", { name: /explore the services/i })).toBeVisible();
+    await expect(page.locator("[data-hero-node]")).toHaveCount(6);
   });
 
   test("the method reads as six steps in order, unpinned", async ({ page }) => {
@@ -41,21 +31,17 @@ test.describe("reduced motion", () => {
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
-  test("the homepage is complete and the hero field is resolved", async ({ page }) => {
+  test("the homepage is complete and the hero renders without scripts", async ({
+    page,
+  }) => {
     await page.goto("/", { waitUntil: "load" });
 
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Stories that move brands forward",
+      "One idea. Every format.",
     );
 
-    // The signal field ships resolved in the markup.
-    const fragments = page.locator("[data-fragment]");
-    expect(await fragments.count()).toBeGreaterThan(40);
-    const transformed = await page.$$eval(
-      "[data-fragment]",
-      (els) => els.filter((el) => (el.getAttribute("transform") ?? "").length > 0).length,
-    );
-    expect(transformed).toBe(0);
+    // The hero is plain server markup: nothing in it waits on JavaScript.
+    await expect(page.locator("[data-hero-node]")).toHaveCount(6);
 
     // Every section still renders its content.
     for (const heading of [
@@ -67,13 +53,6 @@ test.describe("without JavaScript", () => {
     ]) {
       await expect(page.getByRole("heading", { name: heading })).toBeVisible();
     }
-
-    // Nothing is left hidden waiting for a timeline that will never run.
-    const hidden = await page.$$eval(
-      ".signal-hidden",
-      (els) => els.filter((el) => getComputedStyle(el).opacity === "0").length,
-    );
-    expect(hidden).toBe(0);
   });
 
   test("work filters are real links and filter the listing", async ({ page }) => {

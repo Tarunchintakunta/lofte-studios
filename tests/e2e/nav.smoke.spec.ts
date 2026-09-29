@@ -30,11 +30,11 @@ test("navbar shrinks going down and returns going up", async ({ page }) => {
   const rest = { h: await h(), top: await top() };
   await expect(bar).toHaveAttribute("data-compact", "false");
 
-  await step(120);                       // read downward
+  await step(120); // read downward
   const down = { h: await h(), top: await top(), y: await page.evaluate(() => scrollY) };
   await expect(bar).toHaveAttribute("data-compact", "true");
 
-  await step(-120, 4);                   // change your mind
+  await step(-120, 4); // change your mind
   const up = { h: await h(), top: await top() };
   await expect(bar).toHaveAttribute("data-compact", "false");
 
@@ -46,7 +46,7 @@ test("navbar shrinks going down and returns going up", async ({ page }) => {
 test("it does not engage at the top of the page", async ({ page }) => {
   await page.goto("/", { waitUntil: "load" });
   await page.waitForTimeout(300);
-  await page.mouse.wheel(0, 60);         // inside the 140px dead zone
+  await page.mouse.wheel(0, 60); // inside the 140px dead zone
   await page.waitForTimeout(400);
   await expect(page.locator("header [data-compact]")).toHaveAttribute(
     "data-compact",
@@ -55,12 +55,21 @@ test("it does not engage at the top of the page", async ({ page }) => {
 });
 
 test("reduced motion leaves the bar alone", async ({ browser }) => {
-  const ctx = await browser.newContext({ reducedMotion: "reduce", viewport: { width: 1440, height: 900 } });
+  const ctx = await browser.newContext({
+    reducedMotion: "reduce",
+    viewport: { width: 1440, height: 900 },
+  });
   const p2 = await ctx.newPage();
   await p2.goto("/", { waitUntil: "load" });
   await p2.waitForTimeout(300);
-  for (let i = 0; i < 8; i += 1) { await p2.mouse.wheel(0, 120); await p2.waitForTimeout(40); }
+  for (let i = 0; i < 8; i += 1) {
+    await p2.mouse.wheel(0, 120);
+    await p2.waitForTimeout(40);
+  }
   await p2.waitForTimeout(500);
-  await expect(p2.locator("header [data-compact]")).toHaveAttribute("data-compact", "false");
+  await expect(p2.locator("header [data-compact]")).toHaveAttribute(
+    "data-compact",
+    "false",
+  );
   await ctx.close();
 });
