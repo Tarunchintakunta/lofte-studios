@@ -70,7 +70,7 @@ export default async function NotePage(props: PageProps<"/notes/[slug]">) {
         <Container>
           {insight.status === "sample" ? (
             <PlaceholderNote className="mb-12">
-              A template sample, not a published Løfte note. It has no byline or date and
+              A sample note, not a published Løfte position. It has no byline or date and
               is excluded from search indexing and the sitemap.
             </PlaceholderNote>
           ) : null}

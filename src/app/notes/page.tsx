@@ -67,7 +67,7 @@ export default async function NotesPage() {
 
           {samples.length > 0 ? (
             <div className="mt-14">
-              <h2 className="text-heading-2 font-display">Template sample</h2>
+              <h2 className="text-heading-2 font-display">Sample notes</h2>
               <ul className="border-rule mt-5 border-t">
                 {samples.map((insight) => (
                   <li key={insight.slug} className="border-rule border-b">
