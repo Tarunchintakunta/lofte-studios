@@ -78,22 +78,46 @@ export function Container({
 }
 
 /**
- * Section masthead. No all-caps eyebrow: the brief rules those out. Hierarchy
- * comes from a hairline, a display heading, and an optional standfirst.
+ * Section masthead. No all-caps eyebrow: the brief rules those out.
+ *
+ * `center` is the homepage's large, centred headline — one statement per
+ * screen. `start` is the editorial variant with a hairline and a column for
+ * an aside, used on the inner pages.
  */
 export function SectionHead({
   id,
   heading,
   standfirst,
   aside,
+  align = "start",
   className,
 }: {
   id?: string;
   heading: ReactNode;
   standfirst?: ReactNode;
   aside?: ReactNode;
+  align?: "start" | "center";
   className?: string;
 }) {
+  if (align === "center") {
+    return (
+      <div className={cn("mx-auto max-w-4xl text-center", className)}>
+        <h2
+          id={id}
+          className="text-display-2 font-display mx-auto font-semibold tracking-[-0.035em] text-balance"
+        >
+          {heading}
+        </h2>
+        {standfirst ? (
+          <p className="text-body-lg text-fg-muted mx-auto mt-6 max-w-2xl text-balance">
+            {standfirst}
+          </p>
+        ) : null}
+        {aside ? <div className="text-body mt-6">{aside}</div> : null}
+      </div>
+    );
+  }
+
   return (
     <div className={cn("border-rule border-t pt-6 md:pt-8", className)}>
       <div className="lg:grid lg:grid-cols-12 lg:gap-x-12">
