@@ -48,3 +48,6 @@ next-env.d.ts
 /blob-report/
 /playwright/.cache/
 /screenshots/
+
+# local agent tooling state
+/.omc/
