@@ -70,7 +70,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
           </dl>
         }
       >
-        <div className="border-rule mt-14 aspect-[16/8] w-full overflow-hidden border md:mt-18">
+        <div className="mt-14 aspect-[16/8] w-full overflow-hidden rounded-[2rem] md:mt-18">
           {study.cover ? (
             <Image
               src={study.cover}

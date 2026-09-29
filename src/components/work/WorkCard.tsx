@@ -44,8 +44,7 @@ export function WorkCard({
       <Link href={`/work/${study.slug}`} className="media-frame group block">
         <div
           className={cn(
-            "border-rule group-hover:border-fg-subtle w-full overflow-hidden border",
-            "transition-colors duration-[--duration-base]",
+            "w-full overflow-hidden rounded-[2rem]",
             wide ? "aspect-[16/7]" : "aspect-[16/10]",
           )}
         >

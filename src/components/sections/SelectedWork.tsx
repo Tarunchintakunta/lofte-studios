@@ -2,6 +2,7 @@ import { Container, Section, SectionHead } from "@/components/layout/Section";
 import { PlaceholderNote } from "@/components/ui/PlaceholderNote";
 import { TextLink } from "@/components/ui/TextLink";
 import { WorkCard } from "@/components/work/WorkCard";
+import { Reveal } from "@/components/ui/Reveal";
 import { getCaseStudies } from "@/lib/content";
 
 /**
@@ -26,28 +27,35 @@ export async function SelectedWork() {
   return (
     <Section surface="paper" id="work" labelledBy="work-heading">
       <Container>
-        <SectionHead
-          id="work-heading"
-          heading="Selected work."
-          standfirst="Pieces are published here once the client has approved the work, the credit, and the result being shown."
-          aside={
-            <p className="text-body-sm text-fg-muted">
-              <TextLink href="/work">Browse everything</TextLink>
-            </p>
-          }
-        />
+        <Reveal>
+          <SectionHead
+            align="center"
+            id="work-heading"
+            heading="Selected work."
+            standfirst="Pieces are published here once the client has approved the work, the credit, and the result being shown."
+            aside={
+              <TextLink href="/work" className="font-semibold">
+                Browse everything ›
+              </TextLink>
+            }
+          />
+        </Reveal>
 
         <div className="mt-12 grid gap-x-8 gap-y-12 md:mt-16 lg:grid-cols-12">
           {slots.slice(0, 3).map((study, index) => (
-            <WorkCard
+            <Reveal
               key={study.slug}
-              study={study}
-              seed={index + 1}
-              headingLevel={3}
-              // The first piece runs wide; the pair below share the row.
-              size={index === 0 ? "wide" : "standard"}
+              delay={index === 2 ? 120 : 0}
               className={index === 0 ? "lg:col-span-12" : "lg:col-span-6"}
-            />
+            >
+              <WorkCard
+                study={study}
+                seed={index + 1}
+                headingLevel={3}
+                // The first piece runs wide; the pair below share the row.
+                size={index === 0 ? "wide" : "standard"}
+              />
+            </Reveal>
           ))}
         </div>
 

@@ -1,4 +1,5 @@
 import { Container, Section, SectionHead } from "@/components/layout/Section";
+import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/cn";
 
 const STAGES = ["Strategy", "Production", "Localization", "Delivery"];
@@ -21,7 +22,7 @@ const list = "grid grid-cols-1 gap-y-4 sm:grid-cols-4 sm:gap-x-6 sm:gap-y-0";
  */
 function HandoffDiagram() {
   return (
-    <figure className="mt-12 md:mt-16">
+    <figure>
       <div className="flex flex-col gap-10 sm:gap-12">
         {/* The usual route: four owners, three places to lose the intent. */}
         <div>
@@ -94,30 +95,34 @@ export function WhyLofte() {
   return (
     <Section surface="chalk" labelledBy="why-heading">
       <Container>
-        <SectionHead
-          id="why-heading"
-          heading="A complete content studio, without the usual handoffs."
-          standfirst="Most content problems are not craft problems. They are translation problems between the people who decide, the people who make, and the people who ship."
-        />
+        <Reveal>
+          <SectionHead
+            align="center"
+            id="why-heading"
+            heading="A complete content studio, without the usual handoffs."
+            standfirst="Most content problems are not craft problems. They are translation problems between the people who decide, the people who make, and the people who ship."
+          />
+        </Reveal>
 
-        <div className="mt-12 grid gap-x-12 gap-y-10 md:mt-16 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <p className="text-body text-fg-muted">
+        <div className="mt-14 grid gap-4 md:mt-20 lg:grid-cols-2">
+          <Reveal className="bg-paper rounded-[2rem] p-8 md:p-12">
+            <h3 className="text-heading-1 font-display font-semibold">
+              Four translations.
+            </h3>
+            <p className="text-body-lg text-fg-muted mt-4">
               A strategist writes a plan. An agency interprets it. A freelance editor
               interprets that. A localization vendor interprets the edit. By the time
-              anything is published, the original idea has been through four translations
-              and nobody owns the result.
+              anything is published, nobody owns the result.
             </p>
-            <p className="text-body text-fg-muted mt-5">
+            <h3 className="text-heading-1 font-display mt-10 font-semibold">One room.</h3>
+            <p className="text-body-lg text-fg-muted mt-4">
               Løfte keeps strategy, production, localization, and delivery in one studio.
-              That is not a claim about being faster. It is a claim about the finished
-              work still meaning what it was supposed to mean.
+              Not to be faster — so the finished work still means what it was supposed to.
             </p>
-          </div>
-
-          <div className="lg:col-span-6 lg:col-start-7">
+          </Reveal>
+          <Reveal delay={120} className="bg-paper rounded-[2rem] p-8 md:p-12">
             <HandoffDiagram />
-          </div>
+          </Reveal>
         </div>
       </Container>
     </Section>

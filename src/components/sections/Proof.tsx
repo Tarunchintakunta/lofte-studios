@@ -23,12 +23,15 @@ export async function Proof() {
   return (
     <Section surface="chalk" size="tight" labelledBy="proof-heading">
       <Container>
-        <div className="border-rule grid gap-x-12 gap-y-8 border-t pt-8 lg:grid-cols-12">
-          <h2 id="proof-heading" className="text-heading-1 font-display lg:col-span-4">
+        <div className="mx-auto max-w-3xl text-center">
+          <h2
+            id="proof-heading"
+            className="text-display-3 font-display font-semibold tracking-[-0.03em]"
+          >
             Proof, when it is ours to show.
           </h2>
 
-          <div className="lg:col-span-7 lg:col-start-6">
+          <div className="mt-8">
             {hasProof ? (
               <>
                 {testimonials.length > 0 ? (
@@ -58,12 +61,12 @@ export async function Proof() {
               </>
             ) : (
               <>
-                <p className="measure-wide text-body text-fg-muted">
+                <p className="text-body-lg text-fg-muted mx-auto max-w-2xl text-balance">
                   Client names, logos, and quotes go here once each one is approved in
                   writing. Until then this space stays empty. A studio that invents its
                   own references is not a studio you want writing yours.
                 </p>
-                <PlaceholderNote className="mt-6">
+                <PlaceholderNote className="mx-auto mt-6 text-left">
                   Supply approved client logos and signed-off testimonials to fill this
                   section.
                 </PlaceholderNote>
