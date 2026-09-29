@@ -138,6 +138,7 @@ export const caseStudy = {
       options: {
         list: [
           { title: "Reserved slot", value: "reserved" },
+          { title: "Sample (demo, not indexed)", value: "sample" },
           { title: "Published", value: "published" },
         ],
         layout: "radio",

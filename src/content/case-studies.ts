@@ -13,7 +13,13 @@ import type { CapabilitySlug } from "./capabilities";
  * homepage both switch from reserved plates to real work automatically.
  */
 
-export type CaseStudyStatus = "reserved" | "published";
+/**
+ * `sample` entries are demo content with fictional clients. They render like a
+ * published piece but carry a visible "Sample" label, are excluded from search
+ * indexing and the sitemap, and never carry results. Delete them once real
+ * work is published.
+ */
+export type CaseStudyStatus = "reserved" | "sample" | "published";
 
 export type CaseStudy = {
   slug: string;
@@ -30,42 +36,82 @@ export type CaseStudy = {
   challenge?: string;
   approach?: string;
   deliverables?: string[];
+  /** Path under /public. Falls back to an abstract plate while absent. */
+  cover?: string;
   /** Only ever populated from client-supplied, client-approved figures. */
   results?: { label: string; value: string }[];
 };
 
 export const caseStudies: CaseStudy[] = [
   {
+    slug: "sample-harvest-cooperative",
+    status: "sample",
+    reservedTitle: "First case study",
+    reservedSummary: "Sample.",
+    title: "One film, four languages, one argument",
+    client: "Meridian Harvest Co-op (fictional)",
+    sector: "Agriculture",
+    capabilities: ["strategy", "video", "localization"],
+    challenge:
+      "A farmer-owned cooperative needed to explain a new fair-price scheme to growers across four states. Past campaigns had been translated line by line, and the argument fell apart somewhere between English and the field.",
+    approach:
+      "We wrote the one sentence every version had to land — you set the floor price, not the middleman — and built the film around it. Scripts were transcreated rather than translated, narration was recorded with regional voices, and every cut was reviewed by growers before lock. The master and three local versions shipped the same week.",
+    deliverables: [
+      "Message framework and one-line argument",
+      "Two-minute documentary-style film",
+      "Transcreated scripts in Telugu, Hindi, Kannada, and Marathi",
+      "Regional voice-over and burned-in subtitles",
+      "Thirty-second vertical cut-downs for messaging apps",
+    ],
+  },
+  {
+    slug: "sample-northwind-identity",
+    status: "sample",
+    reservedTitle: "Second case study",
+    reservedSummary: "Sample.",
+    title: "A visual system a team kept using",
+    client: "Northwind Learning (fictional)",
+    sector: "Education",
+    capabilities: ["visual", "copy"],
+    challenge:
+      "An ed-tech company had grown from five people to eighty, and every team was designing its own slides, social posts, and course covers. The brand existed in a PDF that nobody opened.",
+    approach:
+      "Rather than a thicker guideline, we built the system into the tools the team already used: editable presentation, social, and course-cover templates, a tight palette, two typefaces, and a writing guide short enough to read in one sitting. We ran two working sessions with the in-house team and handed over every source file.",
+    deliverables: [
+      "Refined palette, type scale, and layout grid",
+      "Presentation, social, and course-cover template kits",
+      "Illustration and infographic style guide",
+      "Four-page voice and writing guide",
+      "Two hands-on training sessions",
+    ],
+  },
+  {
+    slug: "sample-kestrel-audio",
+    status: "sample",
+    reservedTitle: "Third case study",
+    reservedSummary: "Sample.",
+    title: "An onboarding series that speaks the room's language",
+    client: "Kestrel Health (fictional)",
+    sector: "Healthcare",
+    capabilities: ["audio", "localization", "copy"],
+    challenge:
+      "A clinic network was onboarding frontline staff with a slide deck written for head office. New hires in regional clinics skipped it, and the same safety questions kept coming back.",
+    approach:
+      "We rewrote the material as a short audio series staff could listen to between shifts, recorded in three languages with clinicians rather than actors reviewing each script for accuracy. Every episode ends with one thing to do differently tomorrow.",
+    deliverables: [
+      "Eight-episode audio series, five minutes each",
+      "Scripts in English, Telugu, and Tamil",
+      "Narration, cleanup, and mastering",
+      "Printable one-page summary per episode",
+    ],
+  },
+  {
     slug: "reserved-01",
     status: "reserved",
-    reservedTitle: "First case study",
+    reservedTitle: "Reserved slot",
     reservedSummary:
       "Reserved for a flagship piece — the project that best shows strategy, production, and localization running as one job.",
     title: "",
     capabilities: ["strategy", "video", "copy"],
   },
-  {
-    slug: "reserved-02",
-    status: "reserved",
-    reservedTitle: "Second case study",
-    reservedSummary:
-      "Reserved for a visual systems piece: a design language a client team carried on using after handover.",
-    title: "",
-    capabilities: ["visual", "copy"],
-  },
-  {
-    slug: "reserved-03",
-    status: "reserved",
-    reservedTitle: "Third case study",
-    reservedSummary:
-      "Reserved for a localization piece: one story delivered into more than one market without losing its argument.",
-    title: "",
-    capabilities: ["localization", "audio", "video"],
-  },
 ];
-
-export const caseStudyBySlug = (slug: string) =>
-  caseStudies.find((study) => study.slug === slug);
-
-export const publishedCaseStudies = () =>
-  caseStudies.filter((study) => study.status === "published");

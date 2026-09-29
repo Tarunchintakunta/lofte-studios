@@ -42,7 +42,7 @@ export const serviceSchema = z.object({
 export const caseStudySchema = z
   .object({
     slug: z.string().min(1),
-    status: z.enum(["reserved", "published"]),
+    status: z.enum(["reserved", "sample", "published"]),
     reservedTitle: z.string().min(1),
     reservedSummary: z.string().min(1),
     title: z.string(),
@@ -52,6 +52,7 @@ export const caseStudySchema = z
     challenge: z.string().optional(),
     approach: z.string().optional(),
     deliverables: z.array(z.string()).optional(),
+    cover: z.string().optional(),
     results: z
       .array(z.object({ label: z.string().min(1), value: z.string().min(1) }))
       .optional(),
@@ -66,8 +67,16 @@ export const caseStudySchema = z
     message: "A published case study needs a challenge.",
     path: ["challenge"],
   })
-  .refine((study) => study.status !== "reserved" || (study.results ?? []).length === 0, {
-    message: "A reserved slot cannot carry results — there is nothing to report yet.",
+  .refine(
+    (study) => study.status !== "sample" || Boolean(study.title && study.challenge),
+    {
+      message: "A sample case study needs a title and a challenge.",
+      path: ["title"],
+    },
+  )
+  .refine((study) => study.status === "published" || (study.results ?? []).length === 0, {
+    message:
+      "Only a published case study can carry results — samples and reserved slots have none.",
     path: ["results"],
   });
 
