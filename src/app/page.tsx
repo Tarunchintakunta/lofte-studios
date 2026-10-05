@@ -2,6 +2,7 @@ import { Hero } from "@/components/sections/Hero";
 import { Capabilities } from "@/components/sections/Capabilities";
 import { ForAudience } from "@/components/sections/ForAudience";
 import { Statement } from "@/components/sections/Statement";
+import { AiQuality } from "@/components/sections/AiQuality";
 import { WhyLofte } from "@/components/sections/WhyLofte";
 import { SelectedWork } from "@/components/sections/SelectedWork";
 import { FeatureZoom } from "@/components/sections/FeatureZoom";
@@ -20,6 +21,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <AiQuality />
       <Statement />
       <Capabilities />
       <ForAudience />
