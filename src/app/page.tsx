@@ -1,4 +1,4 @@
-import { Hero } from "@/components/sections/Hero";
+import { StudioHero } from "@/components/sections/StudioHero";
 import { Capabilities } from "@/components/sections/Capabilities";
 import { ForAudience } from "@/components/sections/ForAudience";
 import { Statement } from "@/components/sections/Statement";
@@ -20,7 +20,7 @@ import { ClosingCta } from "@/components/sections/ClosingCta";
 export default function HomePage() {
   return (
     <>
-      <Hero />
+      <StudioHero />
       <AiQuality />
       <Statement />
       <Capabilities />

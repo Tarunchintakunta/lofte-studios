@@ -621,3 +621,47 @@
 .gallery > * {
   scroll-snap-align: start;
 }
+
+/* ---------------- Studio hero (ported from valletivarish/lofte) ---------------- */
+:root { --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1); }
+.display { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.035em; line-height: 0.98; }
+.gutter { padding-inline: clamp(1rem, 3.4vw, 3rem); }
+/* ---------------- Hero: PixelCut composition ---------------- */
+.hero {
+  position: relative; min-height: max(46rem, 100svh); overflow: hidden; color: #fff; isolation: isolate;
+  /* The reference's textured orange field: bright centre, deep red-orange edges. */
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 58%, #f86a22 0%, #ec561a 40%, rgb(230 80 22 / 0) 75%),
+    radial-gradient(ellipse 95% 90% at 50% 42%, #e4521a 0%, #d24514 42%, #b2340d 72%, #8a260a 100%);
+}
+/* The editor photo is a focal object, feathered into the field (desktop). */
+.hero-photo { position: absolute; inset: 0; z-index: -1; }
+@media (min-width: 48rem) {
+  .hero-photo { inset: auto 0 0 50%; width: min(84vw, 150vh); aspect-ratio: 27 / 16; translate: -50% 4%; mask-image: radial-gradient(ellipse 58% 62% at 50% 58%, #000 52%, transparent 96%); }
+}
+.hero-grade {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgb(70 16 4 / 0.18) 0%, rgb(70 16 4 / 0) 18%, rgb(20 6 2 / 0) 76%, rgb(20 6 2 / 0.55) 100%);
+}
+@media (max-width: 47.99rem) {
+  .hero-grade { background: linear-gradient(180deg, rgb(58 14 3 / 0.7) 0%, rgb(58 14 3 / 0.25) 45%, rgb(20 6 2 / 0.4) 75%, rgb(20 6 2 / 0.85) 100%); }
+}
+.hero-grain {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0.18; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.chip {
+  display: flex; align-items: center; gap: 0.85rem; padding: 0.75rem 1.2rem 0.75rem 0.95rem;
+  border: 1px solid rgb(255 255 255 / 0.38); border-radius: 1.4rem; background: rgb(90 22 4 / 0.3); backdrop-filter: blur(4px);
+  color: #fff; text-decoration: none;
+  transition: border-color 250ms var(--ease-out-expo), background-color 250ms var(--ease-out-expo);
+}
+/* Chips only hold one line when they sit on the photo (xl); in the small-screen grid they wrap inside their border. */
+@media (min-width: 80rem) { .chip { white-space: nowrap; } }
+.chip:hover { border-color: rgb(255 255 255 / 0.85); background: rgb(90 22 4 / 0.55); }
+.chip-dot { position: absolute; top: 50%; width: 11px; height: 11px; margin-top: -5.5px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 5px rgb(255 255 255 / 0.18); }
+.wave i { display: block; width: 2px; border-radius: 2px; background: rgb(255 150 110 / 0.75); transform-origin: 50% 50%; }
+@media (prefers-reduced-motion: no-preference) {
+  .wave i { animation: wave 1.6s ease-in-out infinite alternate; animation-delay: calc(var(--d) * -1s); }
+  @keyframes wave { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+}
