@@ -7,6 +7,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
+import { capabilityBySlug } from "@/content/capabilities";
 import {
   ArrowRight,
   ClosedCaptioning,
@@ -56,7 +57,7 @@ const chipBoxes = [
 
 // Truthful base bar: counts of Løfte's own offer and studio facts. No outcome figures.
 const facts = [
-  { icon: Stack, value: "04", label: "Capabilities" },
+  { icon: Stack, value: "06", label: "Capabilities" },
   { icon: Path, value: "06", label: "Stages, discover to delivery" },
   { icon: ListBullets, value: "21", label: "Disciplines" },
   { icon: UsersThree, value: "01", label: "Studio, no hand-offs" },
@@ -209,7 +210,7 @@ export function StudioHero() {
                 className="xl:pointer-events-auto xl:absolute"
                 style={{ left: "left" in box ? box.left : undefined, right: "right" in box ? box.right : undefined, top: box.top }}
               >
-                <Link href={`/services/${chipTarget[c.icon]}`} className="chip relative h-full xl:h-auto">
+                <Link href={`/services/${capabilityBySlug(chipTarget[c.icon])?.service ?? ""}`} className="chip relative h-full xl:h-auto">
                   <Icon weight="light" className="size-6 flex-none xl:size-8" aria-hidden="true" />
                   <span className="grid leading-tight">
                     <span className="text-[0.74rem] font-semibold uppercase tracking-[0.08em] xl:text-[0.8rem]">{c.name}</span>

@@ -39,13 +39,14 @@ export function Capabilities() {
                 href={`/services/${capability.service}`}
                 className={cn(
                   "group bg-paper relative flex h-full flex-col overflow-hidden rounded-[2rem] p-8 md:p-10",
-                  "transition-colors duration-[--duration-base] hover:bg-[--color-paper-deep]",
+                  "transition-[background-color,translate,box-shadow] duration-[--duration-base] hover:bg-[--color-paper-deep]",
+                  "hover:shadow-[0_24px_48px_-28px_rgb(0_0_0/0.35)] focus-visible:shadow-[0_24px_48px_-28px_rgb(0_0_0/0.35)] motion-safe:hover:-translate-y-1.5 motion-safe:focus-visible:-translate-y-1.5",
                   index < 2 ? "min-h-[24rem]" : "min-h-[20rem]",
                 )}
               >
                 <h3
                   className={cn(
-                    "font-display font-semibold tracking-[-0.035em]",
+                    "font-display font-semibold tracking-[-0.035em] transition-colors duration-[--duration-base] group-hover:text-accent group-focus-visible:text-accent",
                     index < 2 ? "text-display-2" : "text-display-3",
                   )}
                 >
@@ -69,7 +70,7 @@ export function Capabilities() {
                 {/* One large orange mark per tile, bleeding off the corner. */}
                 <span
                   aria-hidden="true"
-                  className="bg-coral absolute -right-10 -bottom-10 size-32 rounded-full opacity-15 transition-transform duration-700 group-hover:scale-125"
+                  className="bg-coral absolute -right-10 -bottom-10 size-32 rounded-full opacity-15 transition-[scale,opacity] duration-700 ease-[--ease-signal] group-hover:scale-[2.6] group-hover:opacity-25 group-focus-visible:scale-[2.6] group-focus-visible:opacity-25"
                 />
               </Link>
             </Reveal>
