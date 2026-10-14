@@ -155,7 +155,7 @@ export function StudioHero() {
           loading="eager"
           fetchPriority="high"
           data-anim="photo"
-          className="size-full object-cover object-[50%_100%] md:object-center"
+          className="size-full object-cover object-[50%_100%] will-change-transform md:object-center"
         />
       </picture>
       <div className="hero-grade" />
@@ -211,7 +211,7 @@ export function StudioHero() {
 
       {/* Callouts: annotated on the photo from 80rem; a grid below that. */}
       {/* Full-bleed on xl so chips can sit on the photo; it must not swallow clicks meant for the header and CTA. */}
-      <nav data-plane="chips" aria-label="What we make" className="gutter relative z-10 mt-8 xl:pointer-events-none xl:absolute xl:inset-0 xl:mt-0 xl:p-0">
+      <nav data-plane="chips" aria-label="What we make" className="gutter relative z-10 mt-8 xl:will-change-transform xl:pointer-events-none xl:absolute xl:inset-0 xl:mt-0 xl:p-0">
         <ul className="mx-auto grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 xl:contents">
           {heroChips.map((c, i) => {
             const Icon = chipIcons[c.icon];
