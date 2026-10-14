@@ -200,16 +200,21 @@ export function Header() {
               "rounded-capsule border pr-2",
               // The whole treatment is the bar's own box: nothing inside is
               // scaled, so the type stays crisply rasterised at every size.
-              "transition-[margin,padding,background-color,border-color,backdrop-filter]",
+              "transition-[margin,padding,background-color,border-color,backdrop-filter,box-shadow]",
               "duration-[--duration-base] ease-[--ease-quiet]",
               "motion-reduce:transition-none",
               tight ? "mt-2 py-1 pl-4 md:mt-2 md:pl-5" : "mt-3 py-2 pl-4 md:mt-4 md:pl-6",
               // Over the homepage's dark hero the resting bar flips to the ink
               // field's tokens, so every label turns light without a variant.
               !lifted && !open && pathname === "/" && "surface-ink",
+              // Glass: a thin tinted pane, heavy blur with a little saturation so
+              // what passes underneath stays colourful, a lit top edge, and a soft
+              // offset shadow so the pane reads as floating above the page. The tint
+              // stays at 76%: any thinner and the nav labels drop under 4.5:1 when the
+              // bar crosses the ink sections.
               lifted || open
-                ? "border-rule bg-[color-mix(in_oklab,var(--color-chalk)_80%,transparent)] backdrop-blur-xl"
-                : "border-transparent bg-transparent",
+                ? "border-white/60 bg-[color-mix(in_oklab,var(--color-chalk)_76%,transparent)] shadow-[inset_0_1px_0_rgb(255_255_255/0.7),0_12px_32px_-14px_rgb(12_12_12/0.28)] backdrop-blur-2xl backdrop-saturate-150"
+                : "border-white/15 bg-white/[0.06] shadow-[inset_0_1px_0_rgb(255_255_255/0.18)] backdrop-blur-md",
             )}
           >
             <Link
