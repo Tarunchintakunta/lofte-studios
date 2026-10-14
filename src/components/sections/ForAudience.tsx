@@ -88,7 +88,7 @@ export function ForAudience() {
 
       <ul
         ref={trackRef}
-        className="gallery mt-14 flex gap-4 overflow-x-auto px-(--spacing-gutter) pb-2 md:mt-20 xl:px-[max(var(--spacing-gutter),calc((100vw-var(--container-page))/2+var(--spacing-gutter)))]"
+        className="gallery mt-14 flex scroll-px-(--spacing-gutter) gap-4 overflow-x-auto px-(--spacing-gutter) pb-2 md:mt-20 xl:scroll-px-[max(var(--spacing-gutter),calc((100vw-var(--container-page))/2+var(--spacing-gutter)))] xl:px-[max(var(--spacing-gutter),calc((100vw-var(--container-page))/2+var(--spacing-gutter)))]"
       >
         {audiences.map((audience) => (
           <li key={audience.label} className="w-[82vw] shrink-0 sm:w-[24rem]">

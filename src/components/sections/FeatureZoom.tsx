@@ -98,6 +98,7 @@ export function FeatureZoom() {
   const footRef = useRef<HTMLParagraphElement | null>(null);
   const ambientRef = useRef<HTMLDivElement | null>(null);
   const gateRef = useRef<HTMLDivElement | null>(null);
+  const roomRef = useRef<HTMLDivElement | null>(null);
 
   useGSAP(
     () => {
@@ -215,6 +216,43 @@ export function FeatureZoom() {
         };
       });
 
+      // Phones never pin (the room is taller than the screen), but the room
+      // still arrives through the aperture: it opens as a circle from its top
+      // edge while it scrolls up, and the mark swells toward the reader as it
+      // leaves.
+      media.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
+        const room = roomRef.current;
+        const mark = markRef.current;
+        if (!room || !mark) return;
+        gsap.fromTo(
+          room,
+          { clipPath: "circle(6% at 50% 0%)" },
+          {
+            clipPath: "circle(150% at 50% 0%)",
+            // Slow to open, fast to finish: the dome reads as a lens for the first
+            // half, then gets out of the way of the copy.
+            ease: "power3.in",
+            scrollTrigger: {
+              trigger: room,
+              start: "top bottom",
+              end: "top 20%",
+              scrub: 0.3,
+            },
+          },
+        );
+        gsap.to(mark, {
+          scale: 2.4,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: room,
+            start: "top bottom",
+            end: "top 45%",
+            scrub: 0.3,
+          },
+        });
+      });
+
       return () => media.revert();
     },
     { scope: rootRef },
@@ -268,7 +306,10 @@ export function FeatureZoom() {
               </h2>
             </div>
 
-            <p ref={footRef} className="portal-footnote text-body-sm text-fg-muted mt-10">
+            <p
+              ref={footRef}
+              className="portal-footnote text-body-sm text-fg-muted mt-10 max-md:hidden"
+            >
               Keep scrolling. The frame is the way in.
             </p>
           </Container>
@@ -278,7 +319,10 @@ export function FeatureZoom() {
             The room. Visible through the aperture from the first frame, so the
             zoom arrives somewhere instead of cutting to a new section.
             --------------------------------------------------------------- */}
-        <div className="portal-layer portal-layer-room surface-ink bg-surface text-fg relative overflow-hidden py-(--spacing-section-tight)">
+        <div
+          ref={roomRef}
+          className="portal-layer portal-layer-room surface-ink bg-surface text-fg relative overflow-hidden py-(--spacing-section-tight)"
+        >
           <div
             ref={ambientRef}
             aria-hidden
