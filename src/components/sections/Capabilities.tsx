@@ -18,7 +18,7 @@ export function Capabilities() {
             align="center"
             id="capabilities-heading"
             heading="Six ways a story gets made clear."
-            standfirst="Each one is a discipline in its own right. Most projects use three or four at once — which is why they sit in the same studio."
+            standfirst="Each one is a discipline in its own right. Most projects use three or four at once, which is why they sit in the same studio."
           />
         </Reveal>
 

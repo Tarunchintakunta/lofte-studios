@@ -68,7 +68,7 @@ export function ContactForm() {
         tabIndex={-1}
         className="border-accent border-t pt-8 focus-visible:outline-none"
       >
-        <h2 className="text-display-3 font-display">Thank you — that reached us.</h2>
+        <h2 className="text-display-3 font-display">Thank you. That reached us.</h2>
         <p className="measure text-body text-fg-muted mt-5">
           A person will read it and reply. We have not set an expectation about how
           quickly, because we would rather not promise a response time we cannot keep to

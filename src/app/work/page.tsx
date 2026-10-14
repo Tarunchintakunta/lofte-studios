@@ -103,7 +103,7 @@ export default async function WorkPage(props: PageProps<"/work">) {
 
           {!hasPublished && filtered.length > 0 ? (
             <PlaceholderNote className="mt-10">
-              These are samples and reserved slots, not real projects — sample clients are
+              These are samples and reserved slots, not real projects: sample clients are
               fictional. Supply approved case studies and they populate without a code
               change.
             </PlaceholderNote>

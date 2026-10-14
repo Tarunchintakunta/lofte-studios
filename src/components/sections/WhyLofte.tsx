@@ -117,7 +117,7 @@ export function WhyLofte() {
             <h3 className="text-heading-1 font-display mt-10 font-semibold">One room.</h3>
             <p className="text-body-lg text-fg-muted mt-4">
               Løfte keeps strategy, production, localization, and delivery in one studio.
-              Not to be faster — so the finished work still means what it was supposed to.
+              Not to be faster, so the finished work still means what it was supposed to.
             </p>
           </Reveal>
           <Reveal delay={120} className="bg-paper rounded-[2rem] p-8 md:p-12">

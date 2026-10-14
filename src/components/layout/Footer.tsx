@@ -83,7 +83,7 @@ export function Footer() {
                 </li>
               </ul>
               <p className="text-micro text-fg-subtle mt-4">
-                Placeholder address — replace before launch.
+                Placeholder address. Replace before launch.
               </p>
             </div>
           </div>

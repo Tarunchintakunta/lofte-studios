@@ -106,8 +106,21 @@ export function StudioHero() {
         // Scroll out: the photo drifts down, the headline lifts away.
         gsap.to("[data-anim=photo]", { yPercent: 10, ease: "none", scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true } });
         // The headline is fully gone before the page reaches it; the hero dims as the curtain covers it.
-        gsap.to("[data-anim=copy]", { yPercent: -14, opacity: 0, ease: "none", scrollTrigger: { trigger: root.current, start: "top top", end: "40% top", scrub: true } });
+        gsap.to("[data-anim=copy]", { yPercent: -14, scale: 0.94, opacity: 0, ease: "none", scrollTrigger: { trigger: root.current, start: "top top", end: "40% top", scrub: true } });
         gsap.fromTo("[data-anim=dim]", { autoAlpha: 0 }, { autoAlpha: 0.7, ease: "none", scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: true } });
+      });
+
+      // Depth on the way out (xl, where the planes are composed on the photo): the photo is the far
+      // plane and barely moves, the arcs open up behind it, the waveforms climb at mid pace, and the
+      // callouts are the near plane, lifting fastest and parting to either side of the editor.
+      mm.add("(prefers-reduced-motion: no-preference) and (min-width: 80rem)", () => {
+        const out = { trigger: root.current, start: "top top", end: "bottom top", scrub: 0.4 };
+        gsap.to("[data-plane=arcs]", { scale: 1.12, yPercent: -4, transformOrigin: "50% 100%", ease: "none", scrollTrigger: out });
+        gsap.to("[data-anim=wave]", { y: -110, ease: "none", scrollTrigger: out });
+        gsap.to("[data-plane=chips]", { y: -260, ease: "none", scrollTrigger: out });
+        gsap.utils.toArray<HTMLElement>("[data-anim=chip]").forEach((el, i) => {
+          gsap.to(el, { x: i < 3 ? -70 : 70, ease: "none", scrollTrigger: out });
+        });
       });
 
       // Ambient float on the annotated callouts (xl only), each on its own rhythm; it holds still under the pointer or focus.
@@ -149,7 +162,7 @@ export function StudioHero() {
       <div className="hero-grain" />
 
       {/* Arcs through the callout column, from the reference geometry. */}
-      <svg className="pointer-events-none absolute inset-0 z-[2] hidden size-full xl:block" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+      <svg data-plane="arcs" className="pointer-events-none absolute inset-0 z-[2] hidden size-full xl:block" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
         <g fill="none" strokeWidth="1" vectorEffect="non-scaling-stroke">
           <path data-anim="arc" pathLength={1} strokeDasharray="1" stroke="rgb(255 255 255 / 0.28)" d="M 250 900 A 520 520 0 0 1 1190 900" />
           <path data-anim="arc" pathLength={1} strokeDasharray="1" stroke="rgb(255 255 255 / 0.16)" d="M 175 900 A 600 520 0 0 1 1265 900" />
@@ -198,7 +211,7 @@ export function StudioHero() {
 
       {/* Callouts: annotated on the photo from 80rem; a grid below that. */}
       {/* Full-bleed on xl so chips can sit on the photo; it must not swallow clicks meant for the header and CTA. */}
-      <nav aria-label="What we make" className="gutter relative z-10 mt-8 xl:pointer-events-none xl:absolute xl:inset-0 xl:mt-0 xl:p-0">
+      <nav data-plane="chips" aria-label="What we make" className="gutter relative z-10 mt-8 xl:pointer-events-none xl:absolute xl:inset-0 xl:mt-0 xl:p-0">
         <ul className="mx-auto grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 xl:contents">
           {heroChips.map((c, i) => {
             const Icon = chipIcons[c.icon];

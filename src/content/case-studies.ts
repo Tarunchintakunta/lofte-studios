@@ -55,7 +55,7 @@ export const caseStudies: CaseStudy[] = [
     challenge:
       "A farmer-owned cooperative needed to explain a new fair-price scheme to growers across four states. Past campaigns had been translated line by line, and the argument fell apart somewhere between English and the field.",
     approach:
-      "We wrote the one sentence every version had to land — you set the floor price, not the middleman — and built the film around it. Scripts were transcreated rather than translated, narration was recorded with regional voices, and every cut was reviewed by growers before lock. The master and three local versions shipped the same week.",
+      "We wrote the one sentence every version had to land (you set the floor price, not the middleman) and built the film around it. Scripts were transcreated rather than translated, narration was recorded with regional voices, and every cut was reviewed by growers before lock. The master and three local versions shipped the same week.",
     deliverables: [
       "Message framework and one-line argument",
       "Two-minute documentary-style film",
@@ -110,7 +110,7 @@ export const caseStudies: CaseStudy[] = [
     status: "reserved",
     reservedTitle: "Reserved slot",
     reservedSummary:
-      "Reserved for a flagship piece — the project that best shows strategy, production, and localization running as one job.",
+      "Reserved for a flagship piece: the project that best shows strategy, production, and localization running as one job.",
     title: "",
     capabilities: ["strategy", "video", "copy"],
   },

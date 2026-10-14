@@ -54,7 +54,7 @@ export const insights: Insight[] = [
       },
       {
         type: "quote",
-        text: "If the sentence is hard to write, the project is not ready — and more production will not fix it.",
+        text: "If the sentence is hard to write, the project is not ready, and more production will not fix it.",
       },
       { type: "h2", text: "What a good one looks like" },
       {

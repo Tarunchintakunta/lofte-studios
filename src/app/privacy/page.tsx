@@ -51,7 +51,7 @@ export default function PrivacyPage() {
               Submissions are emailed to the studio inbox. No database stores them, and no
               customer-relationship or marketing tool is connected. Until an email
               provider and recipient are configured, submissions are not delivered
-              anywhere at all — the form reports the failure rather than pretending to
+              anywhere at all: the form reports the failure rather than pretending to
               have sent.
             </p>
 
@@ -90,7 +90,7 @@ export default function PrivacyPage() {
 
             <p className="text-body text-fg-muted mt-10">
               Questions in the meantime:{" "}
-              <TextLink href={`mailto:${site.email}`}>{site.email}</TextLink> — itself a
+              <TextLink href={`mailto:${site.email}`}>{site.email}</TextLink>, itself a
               placeholder address.
             </p>
           </div>

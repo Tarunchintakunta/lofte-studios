@@ -114,7 +114,7 @@ export default async function CaseStudyPage(props: PageProps<"/work/[slug]">) {
                     A case study on this site carries the challenge in the client&rsquo;s
                     own framing, the approach we took and why, the deliverables that came
                     out of it, and a gallery of the actual work. Results appear only when
-                    the client supplies and approves the figures — we do not estimate
+                    the client supplies and approves the figures. We do not estimate
                     them, and we do not publish a number we cannot source.
                   </p>
                   <p className="measure-wide text-body text-fg-muted mt-5">

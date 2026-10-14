@@ -77,7 +77,7 @@ export function Method() {
                 </h2>
                 <p className="text-body text-fg-muted mt-6">
                   Six steps, in this order, on every project. The names are plain on
-                  purpose — each one is a decision someone has to own.
+                  purpose: each one is a decision someone has to own.
                 </p>
               </div>
 

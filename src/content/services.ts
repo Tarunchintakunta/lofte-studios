@@ -36,7 +36,7 @@ export const services: Service[] = [
     slug: "words-with-direction",
     title: "Words with direction",
     summary:
-      "Content strategy, copywriting, editing, transcreation, and translation — writing that knows what it is for.",
+      "Content strategy, copywriting, editing, transcreation, and translation: writing that knows what it is for.",
     solves: [
       "Everything we publish says something slightly different.",
       "Our writing is accurate but nobody finishes reading it.",
@@ -81,7 +81,7 @@ export const services: Service[] = [
       {
         question: "Do you write in languages other than English?",
         answer:
-          "Yes, through transcreation with native speakers. Which languages depends on the project — tell us the markets and we will tell you what we can cover.",
+          "Yes, through transcreation with native speakers. Which languages depends on the project. Tell us the markets and we will tell you what we can cover.",
       },
     ],
   },
@@ -137,7 +137,7 @@ export const services: Service[] = [
     slug: "motion-made-to-be-understood",
     title: "Motion made to be understood",
     summary:
-      "Scripting, storyboards, video editing, captioning, subtitling, and motion assets — built for where the work actually plays.",
+      "Scripting, storyboards, video editing, captioning, subtitling, and motion assets: built for where the work actually plays.",
     solves: [
       "Our video looks good and does not explain anything.",
       "We have hours of footage and no idea what to do with it.",
@@ -190,7 +190,7 @@ export const services: Service[] = [
     slug: "sound-with-a-point-of-view",
     title: "Sound with a point of view",
     summary:
-      "Narration, audio cleanup, and audio localization — so the delivery carries the same intent as the script.",
+      "Narration, audio cleanup, and audio localization, so the delivery carries the same intent as the script.",
     solves: [
       "Our voiceover is technically fine and completely flat.",
       "The recording we have is unusable and we cannot reshoot.",
@@ -230,7 +230,7 @@ export const services: Service[] = [
     slug: "reach-and-refinement",
     title: "Reach and refinement",
     summary:
-      "Publishing, distribution, engagement optimization, and performance analysis — deciding what to make next, and what to stop.",
+      "Publishing, distribution, engagement optimization, and performance analysis: deciding what to make next, and what to stop.",
     solves: [
       "We publish constantly and cannot tell what is working.",
       "Our best piece got no distribution.",

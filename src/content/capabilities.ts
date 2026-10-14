@@ -31,7 +31,7 @@ export const capabilities: Capability[] = [
     slug: "video",
     name: "Video",
     outcome:
-      "Footage cut for comprehension, then versioned for where it actually plays — including muted, on a phone, with the captions doing the work.",
+      "Footage cut for comprehension, then versioned for where it actually plays, including muted, on a phone, with the captions doing the work.",
     includes: ["Video editing", "Storyboards", "Captioning", "Motion assets"],
     service: "motion-made-to-be-understood",
   },
@@ -47,7 +47,7 @@ export const capabilities: Capability[] = [
     slug: "audio",
     name: "Audio",
     outcome:
-      "Narration and sound that carry tone as precisely as the words do — recorded, cleaned, and matched to the intent of the script.",
+      "Narration and sound that carry tone as precisely as the words do: recorded, cleaned, and matched to the intent of the script.",
     includes: ["Narration", "Audio cleanup", "Audio localization"],
     service: "sound-with-a-point-of-view",
   },

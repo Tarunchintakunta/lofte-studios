@@ -29,7 +29,7 @@ export default function OpengraphImage() {
     { w: 180, o: 0.22 },
   ];
 
-  const standfirst = `Words, motion, sound, and visual systems — ${site.city}.`;
+  const standfirst = `Words, motion, sound, and visual systems. ${site.city}.`;
 
   return new ImageResponse(
     <div

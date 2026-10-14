@@ -64,7 +64,7 @@ export const enquirySchema = z.object({
   summary: z
     .string()
     .trim()
-    .min(20, "A couple of sentences is enough — we just need the gist.")
+    .min(20, "A couple of sentences is enough, we just need the gist.")
     .max(4000, "That is longer than the form can take. Email us the full brief instead."),
 
   consent: z.literal("on", {

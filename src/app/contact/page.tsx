@@ -36,7 +36,7 @@ export default function ContactPage() {
                 <ol className="mt-6 flex flex-col gap-5">
                   {[
                     "A person reads it. Not a form router, and not an automated qualifier.",
-                    "If we are a fit, we come back with questions — usually about the audience rather than the budget.",
+                    "If we are a fit, we come back with questions, usually about the audience rather than the budget.",
                     "If we are not a fit, we say so, and point you at someone who is.",
                   ].map((step) => (
                     <li key={step} className="text-body-sm text-fg-muted flex gap-4">
@@ -65,7 +65,7 @@ export default function ContactPage() {
 
                 <PlaceholderNote className="mt-8">
                   The address above is a placeholder, and no email provider is configured
-                  yet — submissions are validated and logged rather than delivered. See
+                  yet: submissions are validated and logged rather than delivered. See
                   the launch checklist.
                 </PlaceholderNote>
               </div>

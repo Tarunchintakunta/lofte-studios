@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { Container, Section, SectionHead } from "@/components/layout/Section";
 import { Reveal } from "@/components/ui/Reveal";
@@ -11,17 +11,67 @@ import { audienceLead, audienceRoute, audiences } from "@/content/audiences";
  * scroll with snap points — the page never pins or hijacks the wheel — plus
  * two arrow buttons for anyone without a trackpad. Every card links to the
  * service that usually leads that kind of work.
+ *
+ * While the row is on screen it advances one card every three seconds and
+ * wraps at the end. It holds under the pointer or keyboard focus, stops for
+ * good once the visitor steers it themselves, and never runs with reduced
+ * motion.
  */
 export function ForAudience() {
   const trackRef = useRef<HTMLUListElement | null>(null);
+
+  const steered = useRef(false);
 
   const step = (direction: 1 | -1) => {
     const track = trackRef.current;
     if (!track) return;
     const card = track.firstElementChild as HTMLElement | null;
     const amount = card ? card.offsetWidth + 16 : track.clientWidth * 0.8;
-    track.scrollBy({ left: amount * direction, behavior: "smooth" });
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    if (direction === 1 && atEnd) track.scrollTo({ left: 0, behavior: "smooth" });
+    else track.scrollBy({ left: amount * direction, behavior: "smooth" });
   };
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let visible = false;
+    let held = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => (visible = entry.isIntersecting),
+      {
+        threshold: 0.5,
+      },
+    );
+    observer.observe(track);
+
+    const hold = () => (held = true);
+    const release = () => (held = track.matches(":hover, :focus-within"));
+    const stop = () => (steered.current = true);
+    track.addEventListener("pointerenter", hold);
+    track.addEventListener("pointerleave", release);
+    track.addEventListener("focusin", hold);
+    track.addEventListener("focusout", release);
+    // A swipe or a wheel nudge means the visitor is driving now.
+    track.addEventListener("touchstart", stop, { passive: true });
+    track.addEventListener("wheel", stop, { passive: true });
+
+    const timer = window.setInterval(() => {
+      if (visible && !held && !steered.current && !document.hidden) step(1);
+    }, 3000);
+
+    return () => {
+      window.clearInterval(timer);
+      observer.disconnect();
+      track.removeEventListener("pointerenter", hold);
+      track.removeEventListener("pointerleave", release);
+      track.removeEventListener("focusin", hold);
+      track.removeEventListener("focusout", release);
+      track.removeEventListener("touchstart", stop);
+      track.removeEventListener("wheel", stop);
+    };
+  }, []);
 
   return (
     <Section surface="ink" id="for" labelledBy="for-heading" className="overflow-hidden">
@@ -73,7 +123,10 @@ export function ForAudience() {
           <button
             key={direction}
             type="button"
-            onClick={() => step(direction)}
+            onClick={() => {
+              steered.current = true;
+              step(direction);
+            }}
             aria-label={direction === 1 ? "Next audiences" : "Previous audiences"}
             className="bg-ink-raised grid size-11 place-items-center rounded-full text-lg transition-colors hover:bg-[#2a2a2a]"
           >

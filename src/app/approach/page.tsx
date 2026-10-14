@@ -10,7 +10,7 @@ import { capabilities } from "@/content/capabilities";
 export const metadata = pageMetadata({
   title: "Our approach",
   description:
-    "Discover, Design, Develop, Distribute, Deconstruct, Deliver — the six steps behind every Løfte Studios project.",
+    "Discover, Design, Develop, Distribute, Deconstruct, Deliver: the six steps behind every Løfte Studios project.",
   path: "/approach",
 });
 
@@ -60,7 +60,7 @@ export default function ApproachPage() {
                 A single explainer might use two capabilities and run through all six
                 steps in a fortnight. A market launch might use all six capabilities and
                 loop through Develop and Distribute several times. The order holds either
-                way — the sequence is what stops a project skipping the decision it does
+                way: the sequence is what stops a project skipping the decision it does
                 not want to make.
               </p>
               <p className="text-body text-fg-muted mt-5">

@@ -27,7 +27,7 @@ export const audiences: Audience[] = [
   {
     label: "High-growth founders",
     lead: "strategy",
-    note: "One narrative to raise on, hire on, and sell on — before it fragments.",
+    note: "One narrative to raise on, hire on, and sell on, before it fragments.",
   },
   {
     label: "Venture-backed startups",
@@ -52,7 +52,7 @@ export const audiences: Audience[] = [
   {
     label: "Global creative directors",
     lead: "localization",
-    note: "The same idea in the next market — directed, not dubbed.",
+    note: "The same idea in the next market: directed, not dubbed.",
   },
   {
     label: "Emerging category leaders",

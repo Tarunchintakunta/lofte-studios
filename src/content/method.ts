@@ -53,6 +53,6 @@ export const methodSteps: MethodStep[] = [
     name: "Deliver",
     summary: "Hand over the working parts.",
     detail:
-      "Final files, organised, with the project files, source assets, and templates behind them — so your team can keep going without booking us again.",
+      "Final files, organised, with the project files, source assets, and templates behind them, so your team can keep going without booking us again.",
   },
 ];

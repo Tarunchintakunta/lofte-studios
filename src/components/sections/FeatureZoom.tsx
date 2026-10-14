@@ -313,7 +313,7 @@ export function FeatureZoom() {
                   <PlaceholderNote className="mt-8">
                     {featured?.status === "sample"
                       ? "A sample project with a fictional client, shown to demonstrate the layout."
-                      : "An abstract composition from Løfte\u2019s own signal system — not a client project."}
+                      : "An abstract composition from Løfte\u2019s own signal system, not a client project."}
                   </PlaceholderNote>
                 </div>
               </div>

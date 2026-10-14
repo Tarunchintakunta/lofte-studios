@@ -144,7 +144,7 @@ export async function submitEnquiry(
       console.error("[contact] Email delivery is not configured. Enquiry NOT delivered.");
       return {
         status: "error",
-        message: `Something went wrong on our end and your message was not sent. Please email ${site.email} directly — we are sorry about that.`,
+        message: `Something went wrong on our end and your message was not sent. Please email ${site.email} directly. We are sorry about that.`,
         values,
       };
     }

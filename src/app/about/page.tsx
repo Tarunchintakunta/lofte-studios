@@ -120,7 +120,7 @@ export default async function AboutPage() {
             <PlaceholderNote>
               A team section is built and hidden. Supply names, roles, and portraits in{" "}
               <code className="text-fg-muted">src/content/about.ts</code> and it appears
-              here — no invented colleagues in the meantime.
+              here. No invented colleagues in the meantime.
             </PlaceholderNote>
           </Container>
         </Section>
